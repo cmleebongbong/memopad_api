@@ -14,5 +14,6 @@
     
     <typeAliases>
         <typeAlias type="com.almond.domain.Article" alias="article" />
+        <typeAlias type="com.almond.account.domain.Account" alias="account" />
     </typeAliases>
 </configuration>
