@@ -5,6 +5,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
  
 <mapper namespace="com.almond.account.dao.AccountMapper">
  	
+    <select id="selectAccountById" parameterType="account" resultType="int">
+    	/* ID 조회 */
+    	SELECT COUNT(idx)
+    	FROM memopad_account
+    	WHERE id = #{id}
+    </select>
+ 	
     <select id="signin" parameterType="account" resultType="account">
     	/* 로그인 */
     	SELECT idx,
@@ -13,6 +20,20 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	       regDate
     	FROM memopad_account
     	WHERE id = #{id}
+    </select>
+ 
+    <select id="signup" parameterType="account" resultType="int">
+    	/* 회원가입 */
+    	INSERT INTO memopad_account (
+   	        id,
+   	        password,
+   	        regDate
+    	)
+    	VALUES (
+    		${id},
+    		${password},
+    		NOW()
+    	)
     </select>
  
 </mapper>

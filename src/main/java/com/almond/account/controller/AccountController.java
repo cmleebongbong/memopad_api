@@ -21,15 +21,36 @@ public class AccountController {
     private AccountMapper accountMapper;
      
     @RequestMapping(value="/signin", method=RequestMethod.POST)
-    public HashMap<String, Object> signin(@RequestBody Account account) throws Exception {
+    public HashMap<String, Object> signin(
+    		@RequestBody Account account) throws Exception {
     	
     	Account signinResult = accountMapper.signin(account);
-    	HashMap<String, Object> map = new HashMap<>();
+    	HashMap<String, Object> map = new HashMap<String, Object>();
     	
-    	System.out.println("result : " + signinResult);
-    	
-    	map.put("result", "ok");
+    	if(signinResult != null && signinResult.getPassword().equals(account.getPassword())) {
+        	map.put("result", "ok");
+    	}else{
+        	map.put("result", "error");
+        	map.put("message", "Incorrect username or password");
+    	}
     	
     	return map;
     }
+    
+   @RequestMapping(value="/signup", method=RequestMethod.POST)
+   public HashMap<String, Object> signup(
+   		@RequestBody Account account) throws Exception {
+   	
+   	int signupResult = accountMapper.signup(account);
+   	HashMap<String, Object> map = new HashMap<String, Object>();
+
+   	if(signupResult > 0) {
+   		map.put("result", "ok");
+   	}else{
+    	map.put("result", "error");
+    	map.put("message", "Incorrect username or password");
+   	}
+   	
+   	return map;
+   }
 }
