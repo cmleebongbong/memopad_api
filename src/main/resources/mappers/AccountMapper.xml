@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	WHERE id = #{id}
     </select>
  
-    <select id="signup" parameterType="account" resultType="int">
+    <insert id="signup" parameterType="account">
     	/* 회원가입 */
     	INSERT INTO memopad_account (
    	        id,
@@ -30,10 +30,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
    	        regDate
     	)
     	VALUES (
-    		${id},
-    		${password},
+    		#{id},
+    		#{password},
     		NOW()
     	)
-    </select>
+    </insert>
  
 </mapper>
