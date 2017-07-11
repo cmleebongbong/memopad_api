@@ -10,6 +10,7 @@ public class Account implements Serializable {
 	private long idx;
 	private String id;
 	private String password;
+	private String key;
 	private Date reg_date;
 	
 	public long getIdx() {
@@ -29,6 +30,12 @@ public class Account implements Serializable {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
 	}
 	public Date getReg_date() {
 		return reg_date;

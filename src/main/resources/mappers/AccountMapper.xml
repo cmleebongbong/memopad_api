@@ -5,11 +5,26 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
  
 <mapper namespace="com.almond.account.dao.AccountMapper">
  	
-    <select id="selectAccountById" parameterType="account" resultType="int">
-    	/* ID 조회 */
-    	SELECT COUNT(idx)
+    <select id="selectAccountById" parameterType="String" resultType="account">
+    	/* 사용자 조회 by ID */
+    	SELECT idx,
+    	       id,
+    	       password,
+    	       loginKey,
+    	       regDate
     	FROM memopad_account
     	WHERE id = #{id}
+    </select>
+ 	
+    <select id="selectAccountByKey" parameterType="String" resultType="account">
+    	/* 사용자 조회 by Key */
+    	SELECT idx,
+    	       id,
+    	       password,
+    	       loginKey,
+    	       regDate
+    	FROM memopad_account
+    	WHERE loginKey = #{key}
     </select>
  	
     <select id="signin" parameterType="account" resultType="account">
@@ -17,6 +32,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT idx,
     	       id,
     	       password,
+    	       loginKey,
     	       regDate
     	FROM memopad_account
     	WHERE id = #{id}
@@ -35,5 +51,12 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		NOW()
     	)
     </insert>
+    
+    <update id="updateKey" parameterType="account">
+    	/* 로그인 key 갱신 */
+    	UPDATE memopad_account 
+    	   SET loginKey = #{key}
+    	 WHERE id = #{id}
+    </update>
  
 </mapper>

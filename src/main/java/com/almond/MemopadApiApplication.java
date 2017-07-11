@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @SpringBootApplication
 @MapperScan(value = {"com.almond"})
@@ -31,5 +32,12 @@ public class MemopadApiApplication {
 		return sessionFactory.getObject();
 	}
 	
-	
+	/**
+     * HiddenHttpMethodFilter  
+     */
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter(){
+        HiddenHttpMethodFilter filter = new HiddenHttpMethodFilter();
+        return filter;
+    }
 }
