@@ -10,8 +10,8 @@ public class Account implements Serializable {
 	private long idx;
 	private String id;
 	private String password;
-	private String key;
-	private Date reg_date;
+	private String loginKey;
+	private Date regDate;
 	
 	public long getIdx() {
 		return idx;
@@ -31,16 +31,16 @@ public class Account implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getKey() {
-		return key;
+	public String getLoginKey() {
+		return loginKey;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public void setLoginKey(String loginKey) {
+		this.loginKey = loginKey;
 	}
-	public Date getReg_date() {
-		return reg_date;
+	public Date getRegDate() {
+		return regDate;
 	}
-	public void setReg_date(Date reg_date) {
-		this.reg_date = reg_date;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
 }

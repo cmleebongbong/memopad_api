@@ -20,11 +20,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	/* 사용자 조회 by Key */
     	SELECT idx,
     	       id,
-    	       password,
     	       loginKey,
     	       regDate
     	FROM memopad_account
-    	WHERE loginKey = #{key}
+    	WHERE loginKey = #{loginKey}
     </select>
  	
     <select id="signin" parameterType="account" resultType="account">
@@ -55,7 +54,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <update id="updateKey" parameterType="account">
     	/* 로그인 key 갱신 */
     	UPDATE memopad_account 
-    	   SET loginKey = #{key}
+    	   SET loginKey = #{loginKey}
     	 WHERE id = #{id}
     </update>
  

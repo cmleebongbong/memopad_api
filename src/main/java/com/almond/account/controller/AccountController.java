@@ -45,7 +45,7 @@ public class AccountController {
     	
     	if(signinResult != null && signinResult.getPassword().equals(passwordEncrypt)) {
     		String key = utilService.createRandomKey();
-    		account.setKey(key);
+    		account.setLoginKey(key);
     		accountMapper.updateKey(account);
 	   		Map<String, String> data = new HashMap<String, String>();
 	   		data.put("key", key);
@@ -92,7 +92,7 @@ public class AccountController {
     public ResponseEntity<Object> authInfo(
    		HttpServletRequest request) throws Exception {
 
-    	String key = request.getHeader("Authorization");
+    	String key = request.getHeader("X-authorization");
     	Account result = accountMapper.selectAccountByKey(key);
     	
     	if(result == null) {
