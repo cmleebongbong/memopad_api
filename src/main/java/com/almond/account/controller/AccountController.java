@@ -48,6 +48,7 @@ public class AccountController {
     		account.setLoginKey(key);
     		accountMapper.updateKey(account);
 	   		Map<String, String> data = new HashMap<String, String>();
+	   		data.put("result", "ok");
 	   		data.put("key", key);
         	return new ResponseEntity<Object>(data, HttpStatus.OK);
     	}else{
@@ -70,14 +71,14 @@ public class AccountController {
 	   	
 	   	if(result != null) {
 	   		// ID 중복
-	   		Map<String, String> data = new HashMap<String, String>();
-	   		data.put("message", "중복된 ID 입니다.");
-	   		return new ResponseEntity<Object>(data, HttpStatus.CONFLICT);
+	   		return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 	   	}else{
 	   		// 암호화
 	   		account.setPassword(utilService.encryptSHA256(account.getPassword()));
 	   		accountMapper.signup(account);
-	   		return new ResponseEntity<Object>(HttpStatus.CREATED);
+	   		Map<String, String> data = new HashMap<String, String>();
+	   		data.put("result", "ok");
+	   		return new ResponseEntity<Object>(data, HttpStatus.CREATED);
 	   	}
     }
     
