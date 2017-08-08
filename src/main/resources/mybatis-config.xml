@@ -13,6 +13,6 @@
     </settings>
     
     <typeAliases>
-        <typeAlias type="com.almond.account.domain.Account" alias="account" />
+        <typeAlias type="com.almond.user.domain.User" alias="user" />
     </typeAliases>
 </configuration>

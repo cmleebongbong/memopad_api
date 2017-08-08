@@ -3,43 +3,32 @@
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.almond.account.dao.AccountMapper">
+<mapper namespace="com.almond.user.dao.UserMapper">
  	
-    <select id="selectAccountById" parameterType="String" resultType="account">
+    <select id="selectUserById" parameterType="String" resultType="user">
     	/* 사용자 조회 by ID */
     	SELECT idx,
     	       id,
     	       password,
     	       loginKey,
     	       regDate
-    	FROM memopad_account
+    	FROM memopad_user
     	WHERE id = #{id}
     </select>
  	
-    <select id="selectAccountByKey" parameterType="String" resultType="account">
+    <select id="selectUserByKey" parameterType="String" resultType="user">
     	/* 사용자 조회 by Key */
     	SELECT idx,
     	       id,
     	       loginKey,
     	       regDate
-    	FROM memopad_account
+    	FROM memopad_user
     	WHERE loginKey = #{loginKey}
     </select>
- 	
-    <select id="signin" parameterType="account" resultType="account">
-    	/* 로그인 */
-    	SELECT idx,
-    	       id,
-    	       password,
-    	       loginKey,
-    	       regDate
-    	FROM memopad_account
-    	WHERE id = #{id}
-    </select>
  
-    <insert id="signup" parameterType="account">
+    <insert id="signup" parameterType="user">
     	/* 회원가입 */
-    	INSERT INTO memopad_account (
+    	INSERT INTO memopad_user (
    	        id,
    	        password,
    	        regDate
@@ -51,9 +40,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	)
     </insert>
     
-    <update id="updateKey" parameterType="account">
+    <update id="updateKey" parameterType="user">
     	/* 로그인 key 갱신 */
-    	UPDATE memopad_account 
+    	UPDATE memopad_user 
     	   SET loginKey = #{loginKey}
     	 WHERE id = #{id}
     </update>

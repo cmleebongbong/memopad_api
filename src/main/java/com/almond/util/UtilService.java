@@ -1,4 +1,4 @@
-package com.almond.common.util;
+package com.almond.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
