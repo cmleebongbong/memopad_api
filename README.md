@@ -10,7 +10,7 @@
 
 ### 사용 기술 ###
 
-Spring, Mybatis, 
+Java, Spring, Mybatis
 
 ### 인프라 ###
 
@@ -19,6 +19,6 @@ Spring, Mybatis,
 - DB: MariaDB
 - WEB SERVER: Apache2
 
-### 보일러 플레이트 ###
+### 프레임워크 ###
 
 spring boot
