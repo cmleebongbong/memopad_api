@@ -16,10 +16,10 @@ Spring, Mybatis,
 
 ### 인프라 ###
 
-SERVER: AWS (EC2, RDS)
-OS: CentOS
-DB: MariaDB
-WEB SERVER: Apache2
+- SERVER: AWS (EC2, RDS)
+- OS: CentOS
+- DB: MariaDB
+- WEB SERVER: Apache2
 
 ### 보일러 플레이트 ###
 
