@@ -15,7 +15,7 @@ Java, Spring, Mybatis
 ### 인프라 ###
 
 - SERVER: AWS (EC2, RDS)
-- OS: CentOS
+- OS: Amazon Linux
 - DB: MariaDB
 - WEB SERVER: Apache2
 
