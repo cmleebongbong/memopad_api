@@ -1,8 +1,5 @@
 package com.almond.user.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
-import com.almond.user.dao.UserMapper;
 import com.almond.user.domain.User;
 import com.almond.user.service.UserService;
 import com.almond.util.UtilService;
@@ -35,10 +32,10 @@ public class UserController {
      * Sign in
      * 
      * @param user
-     * @return ResponseEntity<Void>
+     * @return ResponseEntity<CommonResponse>
      */
     @RequestMapping(value="/signin", method=RequestMethod.POST)
-    public ResponseEntity<Object> signin(
+    public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
     	
     	User userInfo = userService.selectUserById(user.getId());
@@ -49,17 +46,13 @@ public class UserController {
     		user.setLoginKey(key);
     		userService.updateLoginKey(user);
 	   		
-	   		CommonResponse res = new CommonResponse();
-	   		res.setResult("ok");
+	   		CommonResponse res = new CommonResponse(ResponseResult.OK);
 	   		res.setData(key);
-	   		
-        	return new ResponseEntity<Object>(res, HttpStatus.OK);
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}else{
-    		
-	   		CommonResponse res = new CommonResponse();
-	   		res.setResult("error");
+	   		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
 	   		res.setMessage("ID 또는 password가 틀렸습니다.");
-        	return new ResponseEntity<Object>(HttpStatus.UNAUTHORIZED);
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
     	}
     }
     
@@ -68,24 +61,26 @@ public class UserController {
      * Sign	up
      * 
      * @param user
-     * @return ResponseEntity<Void>
+     * @return ResponseEntity<CommonResponse>
      */
     @RequestMapping(value="/signup", method=RequestMethod.POST)
-    public ResponseEntity<Object> signup(
-   		@RequestBody User user) throws Exception {
+    public ResponseEntity<CommonResponse> signup(
+    		@RequestBody User user) throws Exception {
    	
-    	User result = userMapper.selectUserById(user.getId());
+    	User result = userService.selectUserById(user.getId());
 	   	
 	   	if(result != null) {
 	   		// ID 중복
-	   		return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+	   		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+	   		res.setMessage("이미 사용중인 ID입니다.");
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
 	   	}else{
 	   		// 암호화
 	   		user.setPassword(utilService.encryptSHA256(user.getPassword()));
-	   		userMapper.signup(user);
-	   		Map<String, String> data = new HashMap<String, String>();
-	   		data.put("result", "ok");
-	   		return new ResponseEntity<Object>(data, HttpStatus.CREATED);
+	   		userService.signup(user);
+	   		CommonResponse res = new CommonResponse(ResponseResult.OK);
+	   		res.setMessage("가입이 완료되었습니다. 로그인 해주세요.");
+	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.CREATED);
 	   	}
     }
     
@@ -93,22 +88,23 @@ public class UserController {
     /**
      * Auth Info
      * 
-     * @param account
-     * @return ResponseEntity<Void>
+     * @param request
+     * @return ResponseEntity<CommonResponse>
      */
     @RequestMapping(value="/auth", method=RequestMethod.GET)
-    public ResponseEntity<Object> authInfo(
-   		HttpServletRequest request) throws Exception {
+    public ResponseEntity<CommonResponse> authInfo(
+    		HttpServletRequest request) throws Exception {
 
     	String key = request.getHeader("X-authorization");
-    	User result = userMapper.selectUserByKey(key);
+    	User result = userService.selectUserByKey(key);
     	
     	if(result == null) {
-        	return new ResponseEntity<Object>(HttpStatus.UNAUTHORIZED);
+    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+    		res.setMessage("회원정보를 가져올수 없습니다.");
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
     	}else{
-	   		Map<String, Object> data = new HashMap<String, Object>();
-	   		data.put("auth", result);
-       		return new ResponseEntity<Object>(data, HttpStatus.OK);
+    		CommonResponse res = new CommonResponse(ResponseResult.OK);
+       		return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}
     }
 }

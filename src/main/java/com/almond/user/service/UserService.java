@@ -17,8 +17,26 @@ public class UserService {
      * @throws Exception
      */
     public User selectUserById(String id) throws Exception {
-    	User userInfo = userMapper.selectUserById(id);
-    	return userInfo;
+    	User user = userMapper.selectUserById(id);
+    	return user;
+    }
+    
+    /**
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public User selectUserByKey(String key) throws Exception {
+    	User user = userMapper.selectUserByKey(key);
+    	return user;
+    }
+    
+    /**
+     * @param user
+     * @throws Exception
+     */
+    public void signup(User user) throws Exception {
+    	userMapper.signup(user);
     }
     
     /**
