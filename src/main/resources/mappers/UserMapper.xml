@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	)
     </insert>
     
-    <update id="updateKey" parameterType="user">
+    <update id="updateLoginKey" parameterType="user">
     	/* 로그인 key 갱신 */
     	UPDATE memopad_user 
     	   SET loginKey = #{loginKey}

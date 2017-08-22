@@ -37,6 +37,12 @@ public class UserController {
     @RequestMapping(value="/signin", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
+    	CommonResponse res = new CommonResponse();
+    	if(user.getId() == null || user.getPassword() == null) {
+	   		res.setResult(ResponseResult.ERROR);
+	   		res.setMessage("ID또는 PASSWORD를 입력해주세요.");
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.BAD_REQUEST);
+    	}
     	
     	User userInfo = userService.selectUserById(user.getId());
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
@@ -46,11 +52,11 @@ public class UserController {
     		user.setLoginKey(key);
     		userService.updateLoginKey(user);
 	   		
-	   		CommonResponse res = new CommonResponse(ResponseResult.OK);
+	   		res.setResult(ResponseResult.OK);
 	   		res.setData(key);
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}else{
-	   		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+	   		res.setResult(ResponseResult.ERROR);
 	   		res.setMessage("ID 또는 password가 틀렸습니다.");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
     	}
