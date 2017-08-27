@@ -22,7 +22,6 @@ import com.almond.util.UtilService;
 @RequestMapping(value="/api/user")
 public class UserController {
 
-	
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,7 +36,9 @@ public class UserController {
     @RequestMapping(value="/signin", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
+    	
     	CommonResponse res = new CommonResponse();
+    	
     	if(user.getId() == null || user.getPassword() == null) {
 	   		res.setResult(ResponseResult.ERROR);
 	   		res.setMessage("ID또는 PASSWORD를 입력해주세요.");
@@ -72,19 +73,21 @@ public class UserController {
     @RequestMapping(value="/signup", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signup(
     		@RequestBody User user) throws Exception {
+    	
+   		CommonResponse res = new CommonResponse();
    	
     	User result = userService.selectUserById(user.getId());
 	   	
 	   	if(result != null) {
 	   		// ID 중복
-	   		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+	   		res.setResult(ResponseResult.ERROR);
 	   		res.setMessage("이미 사용중인 ID입니다.");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
 	   	}else{
 	   		// 암호화
 	   		user.setPassword(utilService.encryptSHA256(user.getPassword()));
 	   		userService.signup(user);
-	   		CommonResponse res = new CommonResponse(ResponseResult.OK);
+	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("가입이 완료되었습니다. 로그인 해주세요.");
 	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.CREATED);
 	   	}
@@ -101,15 +104,17 @@ public class UserController {
     public ResponseEntity<CommonResponse> authInfo(
     		HttpServletRequest request) throws Exception {
 
+		CommonResponse res = new CommonResponse();
+
     	String key = request.getHeader("X-authorization");
     	User result = userService.selectUserByKey(key);
     	
     	if(result == null) {
-    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+    		res.setResult(ResponseResult.ERROR);
     		res.setMessage("회원정보를 가져올수 없습니다.");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
     	}else{
-    		CommonResponse res = new CommonResponse(ResponseResult.OK);
+    		res.setResult(ResponseResult.OK);
        		return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}
     }

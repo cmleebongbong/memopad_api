@@ -32,7 +32,7 @@ public class UtilService {
 	}
 	
 	/**
-	 * 20자 랜덤문자열
+	 * 20자 랜덤문자열 생성
 	 * 
 	 * @return String
 	 */
