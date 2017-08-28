@@ -10,11 +10,11 @@
 
 ### 사용 기술 ###
 
-Java, Spring, Mybatis
+Java, Spring, Mybatis, JWT
 
 ### 인프라 ###
 
-- SERVER: AWS (EC2, RDS)
+- SERVER: AWS (EC2, RDS, S3)
 - OS: Amazon Linux
 - DB: MariaDB
 - WEB SERVER: Apache2
