@@ -10,7 +10,7 @@
 
 ### 사용 기술 ###
 
-Java, Spring, Mybatis
+Java, Spring, Mybatis, JWT
 
 ### 인프라 ###
 
