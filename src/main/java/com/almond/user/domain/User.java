@@ -10,7 +10,7 @@ public class User implements Serializable {
 	private long idx;
 	private String id;
 	private String password;
-	private String loginKey;
+	private String accessToken;
 	private Date regDate;
 	
 	public long getIdx() {
@@ -31,11 +31,11 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getLoginKey() {
-		return loginKey;
+	public String getAccessToken() {
+		return accessToken;
 	}
-	public void setLoginKey(String loginKey) {
-		this.loginKey = loginKey;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	public Date getRegDate() {
 		return regDate;

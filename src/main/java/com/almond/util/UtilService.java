@@ -2,12 +2,22 @@ package com.almond.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 
 @Service
 public class UtilService {
+
+	@Value("${auth.secret}") String secret;
+	
+	
 	/**
 	 * SHA256 암호화
 	 * 
@@ -36,7 +46,7 @@ public class UtilService {
 	 * 
 	 * @return String
 	 */
-	public String createRandomKey() {
+	public String createRandomKey() throws Exception {
 		StringBuffer temp = new StringBuffer();
 		Random rnd = new Random();
 		for (int i = 0; i < 20; i++) {
@@ -58,5 +68,23 @@ public class UtilService {
 		}
 		
 		return temp.toString();
+	}
+	
+	/**
+	 * Access Token 생성
+	 * 
+	 * @return String
+	 */
+	public String createToken() throws Exception {
+	    Date expirationDate = Date.from(ZonedDateTime.now().plusDays(7).toInstant());
+		
+		Algorithm algorithm = Algorithm.HMAC256(secret);
+		String token = JWT.create()
+				.withIssuer("com.almond")
+				.withSubject("user")
+                .withExpiresAt(expirationDate)
+				.sign(algorithm);
+		
+		return token;
 	}
 }

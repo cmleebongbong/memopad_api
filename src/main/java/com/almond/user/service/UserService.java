@@ -43,7 +43,7 @@ public class UserService {
      * @param user
      * @throws Exception
      */
-    public void updateLoginKey(User user) throws Exception {
-    	userMapper.updateLoginKey(user);
+    public void updateAccessToken(User user) throws Exception {
+    	userMapper.updateAccessToken(user);
     }
 }

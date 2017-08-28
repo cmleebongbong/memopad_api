@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT idx,
     	       id,
     	       password,
-    	       loginKey,
+    	       accessToken,
     	       regDate
     	FROM memopad_user
     	WHERE id = #{id}
@@ -20,10 +20,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	/* 사용자 조회 by Key */
     	SELECT idx,
     	       id,
-    	       loginKey,
+    	       accessToken,
     	       regDate
     	FROM memopad_user
-    	WHERE loginKey = #{loginKey}
+    	WHERE accessToken = #{accessToken}
     </select>
  
     <insert id="signup" parameterType="user">
@@ -40,10 +40,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	)
     </insert>
     
-    <update id="updateLoginKey" parameterType="user">
+    <update id="updateAccessToken" parameterType="user">
     	/* 로그인 key 갱신 */
     	UPDATE memopad_user 
-    	   SET loginKey = #{loginKey}
+    	   SET accessToken = #{accessToken}
     	 WHERE id = #{id}
     </update>
  

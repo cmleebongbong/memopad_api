@@ -10,7 +10,6 @@ public class Article implements Serializable {
 	private long idx;
 	private String id;
 	private String password;
-	private String loginKey;
 	private Date regDate;
 	
 	public long getIdx() {
@@ -30,12 +29,6 @@ public class Article implements Serializable {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getLoginKey() {
-		return loginKey;
-	}
-	public void setLoginKey(String loginKey) {
-		this.loginKey = loginKey;
 	}
 	public Date getRegDate() {
 		return regDate;

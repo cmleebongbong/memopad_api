@@ -61,12 +61,21 @@
 		</dependency>
 		<!-- Mybatis E 관련 -->
 		
-		<!-- Log 관련 -->
+		<!-- Log 관련 S -->
 		<dependency>
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
 		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 		    <version>1.16</version>
 		</dependency>
+		<!-- Log 관련 E -->
+		
+		<!-- JWT 관련 S -->
+		<dependency>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>java-jwt</artifactId>
+		    <version>3.2.0</version>
+		</dependency>
+		<!-- JWT 관련 E -->
 		
 	</dependencies>
 
