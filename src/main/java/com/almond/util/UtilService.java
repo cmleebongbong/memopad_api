@@ -9,6 +9,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.almond.user.domain.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
@@ -75,11 +76,13 @@ public class UtilService {
 	 * 
 	 * @return String
 	 */
-	public String createToken() throws Exception {
+	public String createToken(User user) throws Exception {
 	    Date expirationDate = Date.from(ZonedDateTime.now().plusDays(7).toInstant());
 		
 		Algorithm algorithm = Algorithm.HMAC256(secret);
 		String token = JWT.create()
+				.withClaim("idx", user.getIdx())
+				.withClaim("id", user.getId())
 				.withIssuer("com.almond")
 				.withSubject("user")
                 .withExpiresAt(expirationDate)

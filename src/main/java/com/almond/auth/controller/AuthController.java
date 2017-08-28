@@ -66,9 +66,9 @@ public class AuthController {
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
     	
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
-    		String accessToken = utilService.createToken();
+    		String accessToken = utilService.createToken(user);
     		user.setAccessToken(accessToken);
-    		userService.updateAccessToken(user);
+    		userService.updateAccessToken(userInfo);
 	   		
 	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("로그인에 성공했습니다.");
