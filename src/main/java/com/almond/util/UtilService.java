@@ -2,22 +2,12 @@ package com.almond.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.almond.user.domain.User;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 @Service
 public class UtilService {
-
-	@Value("${auth.secret}") String secret;
-	
 	
 	/**
 	 * SHA256 암호화
@@ -76,7 +66,7 @@ public class UtilService {
 	 * 
 	 * @return String
 	 */
-	public String createToken(User user) throws Exception {
+	/*public String createToken(User user) throws Exception {
 	    Date expirationDate = Date.from(ZonedDateTime.now().plusDays(7).toInstant());
 		
 		Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -89,5 +79,5 @@ public class UtilService {
 				.sign(algorithm);
 		
 		return token;
-	}
+	}*/
 }

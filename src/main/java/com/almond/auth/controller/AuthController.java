@@ -19,9 +19,6 @@ import com.almond.common.domain.CommonResponse;
 import com.almond.user.domain.User;
 import com.almond.user.service.UserService;
 import com.almond.util.UtilService;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 @SpringBootApplication
 @RestController
@@ -50,7 +47,7 @@ public class AuthController {
      * @param user
      * @return ResponseEntity<CommonResponse>
      */
-    @RequestMapping(value="/signin", method=RequestMethod.POST)
+    @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
     	
@@ -66,8 +63,9 @@ public class AuthController {
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
     	
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
-    		String accessToken = utilService.createToken(user);
-    		user.setAccessToken(accessToken);
+    		//String accessToken = utilService.createToken(userInfo);
+    		String accessToken = "";
+    		userInfo.setAccessToken(accessToken);
     		userService.updateAccessToken(userInfo);
 	   		
 	   		res.setResult(ResponseResult.OK);
@@ -95,9 +93,11 @@ public class AuthController {
 
 		CommonResponse res = new CommonResponse();
 
-    	String accessToken = request.getHeader("X-authorization");
+    	String accessToken = request.getHeader("X-Authorization");
     	
-    	DecodedJWT jwt = null;
+    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	
+    	/*DecodedJWT jwt = null;
     	
         try {
 	    	jwt = authService.authCheck(accessToken);
@@ -116,6 +116,6 @@ public class AuthController {
     		res.setResult(ResponseResult.ERROR);
         	res.setMessage("Invalid token");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
-        }
+        }*/
     }
 }
