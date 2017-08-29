@@ -1,0 +1,28 @@
+# PORT
+server:
+  port: 8080
+
+# DB
+spring:
+  datasource:
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://awsdb.c5buikycbjqa.ap-northeast-2.rds.amazonaws.com/o2
+    username: admin
+    password: dldmswk!12
+
+# BANNER
+banner:
+  location: banner.txt
+
+# AUTH
+security:
+  user:
+    name: user
+    password: test
+
+  oauth2:
+    client:
+      client-id: foo
+      client-secret: bar
+    authorization:
+      check-token-access: isAuthenticated()

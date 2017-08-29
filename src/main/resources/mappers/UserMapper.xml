@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.almond.user.dao.UserMapper">
+ 	
+    <select id="selectUserById" parameterType="String" resultType="user">
+    	/* 사용자 조회 by ID */
+    	SELECT idx,
+    	       id,
+    	       password,
+    	       accessToken,
+    	       regDate
+    	FROM memopad_user
+    	WHERE id = #{id}
+    </select>
+ 	
+    <select id="selectUserByKey" parameterType="String" resultType="user">
+    	/* 사용자 조회 by Key */
+    	SELECT idx,
+    	       id,
+    	       accessToken,
+    	       regDate
+    	FROM memopad_user
+    	WHERE accessToken = #{accessToken}
+    </select>
+ 
+    <insert id="signup" parameterType="user">
+    	/* 회원가입 */
+    	INSERT INTO memopad_user (
+   	        id,
+   	        password,
+   	        regDate
+    	)
+    	VALUES (
+    		#{id},
+    		#{password},
+    		NOW()
+    	)
+    </insert>
+    
+    <update id="updateAccessToken" parameterType="user">
+    	/* 로그인 key 갱신 */
+    	UPDATE memopad_user 
+    	   SET accessToken = #{accessToken}
+    	 WHERE id = #{id}
+    </update>
+ 
+</mapper>
