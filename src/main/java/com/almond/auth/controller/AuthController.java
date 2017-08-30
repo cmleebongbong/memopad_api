@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.almond.annotations.CheckAuth;
 import com.almond.auth.service.AuthService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 import com.almond.user.domain.User;
 import com.almond.user.service.UserService;
 import com.almond.util.UtilService;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 @SpringBootApplication
 @RestController
@@ -47,6 +51,7 @@ public class AuthController {
      * @param user
      * @return ResponseEntity<CommonResponse>
      */
+    @CheckAuth(value=false)
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
@@ -63,8 +68,7 @@ public class AuthController {
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
     	
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
-    		//String accessToken = utilService.createToken(userInfo);
-    		String accessToken = "";
+    		String accessToken = authService.createToken(userInfo);
     		userInfo.setAccessToken(accessToken);
     		userService.updateAccessToken(userInfo);
 	   		
@@ -87,6 +91,7 @@ public class AuthController {
      * @param request
      * @return ResponseEntity<CommonResponse>
      */
+    @CheckAuth(value=false)
     @RequestMapping(value="/check", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> authCheck(
     		HttpServletRequest request) throws Exception {
@@ -95,18 +100,15 @@ public class AuthController {
 
     	String accessToken = request.getHeader("X-Authorization");
     	
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
-    	
-    	/*DecodedJWT jwt = null;
-    	
         try {
-	    	jwt = authService.authCheck(accessToken);
+        	DecodedJWT jwt = authService.tokenCheck(accessToken);
 	    	
 	        System.out.println("getIssuer : " + jwt.getIssuer());
 	        System.out.println("getSubject : " + jwt.getSubject());
 	        System.out.println("getExpiresAt : " + jwt.getExpiresAt());
 
     		res.setResult(ResponseResult.OK);
+    		res.setData(jwt);
        		return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
         } catch(JWTDecodeException exception) {
     		res.setResult(ResponseResult.ERROR);
@@ -116,6 +118,6 @@ public class AuthController {
     		res.setResult(ResponseResult.ERROR);
         	res.setMessage("Invalid token");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
-        }*/
+        }
     }
 }

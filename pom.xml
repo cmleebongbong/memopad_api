@@ -69,12 +69,13 @@
 		</dependency>
 		<!-- Log 관련 E -->
 		
-		<!-- Auth 관련 S -->
+		<!-- Security 관련 S -->
 		<dependency>
-		    <groupId>org.springframework.security.oauth</groupId>
-		    <artifactId>spring-security-oauth2</artifactId>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>java-jwt</artifactId>
+		    <version>3.2.0</version>
 		</dependency>
-		<!-- Auth 관련 E -->
+		<!-- Security 관련 E -->
 				
 		<!-- Lombok 관련 S -->
 		<dependency>

@@ -4,10 +4,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UtilService {
+	
+	@Value("${auth.secret}")
+	private String secret;
 	
 	/**
 	 * SHA256 암호화
@@ -60,24 +64,4 @@ public class UtilService {
 		
 		return temp.toString();
 	}
-	
-	/**
-	 * Access Token 생성
-	 * 
-	 * @return String
-	 */
-	/*public String createToken(User user) throws Exception {
-	    Date expirationDate = Date.from(ZonedDateTime.now().plusDays(7).toInstant());
-		
-		Algorithm algorithm = Algorithm.HMAC256(secret);
-		String token = JWT.create()
-				.withClaim("idx", user.getIdx())
-				.withClaim("id", user.getId())
-				.withIssuer("com.almond")
-				.withSubject("user")
-                .withExpiresAt(expirationDate)
-				.sign(algorithm);
-		
-		return token;
-	}*/
 }

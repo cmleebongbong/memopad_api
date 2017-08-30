@@ -1,6 +1,8 @@
 # PORT
 server:
   port: 8080
+  
+---
 
 # DB
 spring:
@@ -10,19 +12,14 @@ spring:
     username: admin
     password: dldmswk!12
 
+---
+
 # BANNER
 banner:
   location: banner.txt
 
-# AUTH
-security:
-  user:
-    name: user
-    password: test
+---
 
-  oauth2:
-    client:
-      client-id: foo
-      client-secret: bar
-    authorization:
-      check-token-access: isAuthenticated()
+# AUTH
+auth:
+  secret: SeCrEtKeYfLLHaShInM
