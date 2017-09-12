@@ -35,7 +35,17 @@ public class AuthController {
 	UserService userService;
 	@Autowired
 	UtilService utilService;
-	
+ 
+    /**
+     * 권한 조회
+     * 
+     * CheckAuth
+     * 
+     * @param user
+     * @return ResponseEntity<CommonResponse>
+     * @throws Exception
+     */
+    @CheckAuth(value=true)
     @RequestMapping(value="/", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> article(
     		@RequestBody User user) throws Exception {
@@ -51,7 +61,6 @@ public class AuthController {
      * @param user
      * @return ResponseEntity<CommonResponse>
      */
-    @CheckAuth(value=false)
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signin(
     		@RequestBody User user) throws Exception {
@@ -91,7 +100,6 @@ public class AuthController {
      * @param request
      * @return ResponseEntity<CommonResponse>
      */
-    @CheckAuth(value=false)
     @RequestMapping(value="/check", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> authCheck(
     		HttpServletRequest request) throws Exception {

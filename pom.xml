@@ -36,7 +36,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Mybatis S 관련 -->
+		<!-- Mybatis 관련 -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -59,30 +59,43 @@
 		    <artifactId>mybatis</artifactId>
 		    <version>3.4.1</version>
 		</dependency>
-		<!-- Mybatis E 관련 -->
+		<!-- // Mybatis 관련 -->
 		
-		<!-- Log 관련 S -->
+		<!-- Log 관련 -->
 		<dependency>
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
 		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 		    <version>1.16</version>
 		</dependency>
-		<!-- Log 관련 E -->
+		<!-- // Log 관련 -->
 		
-		<!-- Security 관련 S -->
+		<!-- Security 관련 -->
 		<dependency>
 		    <groupId>com.auth0</groupId>
 		    <artifactId>java-jwt</artifactId>
 		    <version>3.2.0</version>
 		</dependency>
-		<!-- Security 관련 E -->
+		<!-- // Security 관련 -->
 				
-		<!-- Lombok 관련 S -->
+		<!-- Lombok 관련 -->
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
 		</dependency>
-		<!-- Lombok 관련 E -->
+		<!-- // Lombok 관련 -->
+		
+		<!-- Swagger 관련 -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>2.2.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>2.2.2</version>
+		</dependency>
+		<!-- // Swagger 관련 -->
 	</dependencies>
 
 	<build> 

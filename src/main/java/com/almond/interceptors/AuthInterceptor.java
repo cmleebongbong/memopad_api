@@ -29,7 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 		HandlerMethod method = (HandlerMethod)handler;
 		CheckAuth auth = method.getMethodAnnotation(CheckAuth.class);
 		
-		if(auth != null && auth.value() == false){
+		if(auth == null || auth.value() == false){
 			System.out.println("=== don't check auth ===");
 			return true;
 		}
