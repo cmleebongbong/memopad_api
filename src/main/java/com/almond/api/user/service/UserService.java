@@ -1,10 +1,10 @@
-package com.almond.user.service;
+package com.almond.api.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.almond.user.dao.UserMapper;
-import com.almond.user.domain.User;
+import com.almond.api.user.dao.UserMapper;
+import com.almond.api.user.domain.User;
 
 @Service
 public class UserService {

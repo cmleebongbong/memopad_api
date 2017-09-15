@@ -1,6 +1,6 @@
-package com.almond.user.dao;
+package com.almond.api.user.dao;
 
-import com.almond.user.domain.User;
+import com.almond.api.user.domain.User;
 
 public interface UserMapper {
 	public User selectUserById(String id) throws Exception;

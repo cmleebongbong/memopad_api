@@ -1,4 +1,4 @@
-package com.almond.user.controller;
+package com.almond.api.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
-import com.almond.user.domain.User;
-import com.almond.user.service.UserService;
+import com.almond.api.user.domain.User;
+import com.almond.api.user.service.UserService;
 import com.almond.util.UtilService;
 
 @SpringBootApplication

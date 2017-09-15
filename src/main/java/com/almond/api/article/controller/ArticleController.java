@@ -1,4 +1,4 @@
-package com.almond.article.controller;
+package com.almond.api.article.controller;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.almond.api.user.domain.User;
 import com.almond.common.domain.CommonResponse;
-import com.almond.user.domain.User;
 
 @SpringBootApplication
 @RestController

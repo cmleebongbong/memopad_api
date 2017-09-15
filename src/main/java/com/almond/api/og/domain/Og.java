@@ -1,4 +1,4 @@
-package com.almond.og.domain;
+package com.almond.api.og.domain;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.almond.user.domain;
+package com.almond.api.user.domain;
 
 import java.io.Serializable;
 import java.util.Date;

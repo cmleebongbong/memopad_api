@@ -1,4 +1,4 @@
-package com.almond.auth.controller;
+package com.almond.api.auth.controller;
 
 import java.util.HashMap;
 
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.almond.annotations.CheckAuth;
-import com.almond.auth.service.AuthService;
+import com.almond.api.auth.service.AuthService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
-import com.almond.user.domain.User;
-import com.almond.user.service.UserService;
+import com.almond.api.user.domain.User;
+import com.almond.api.user.service.UserService;
 import com.almond.util.UtilService;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;

@@ -1,4 +1,4 @@
-package com.almond.og.service;
+package com.almond.api.og.service;
 
 
 import java.nio.charset.Charset;
@@ -11,7 +11,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.almond.og.domain.Og;
+import com.almond.api.og.domain.Og;
 
 @Service
 public class OgService {

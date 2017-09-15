@@ -3,13 +3,14 @@ package com.almond.interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.almond.annotations.CheckAuth;
-import com.almond.auth.service.AuthService;
+import com.almond.api.auth.service.AuthService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 import com.auth0.jwt.exceptions.JWTDecodeException;
@@ -30,7 +31,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 		CheckAuth auth = method.getMethodAnnotation(CheckAuth.class);
 		
 		if(auth == null || auth.value() == false){
-			System.out.println("=== don't check auth ===");
 			return true;
 		}
 		
