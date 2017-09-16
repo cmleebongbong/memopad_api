@@ -22,7 +22,7 @@ public class OgController {
 	@Autowired
 	OgService ogService;
 
-    @RequestMapping(value="/", method=RequestMethod.GET)
+    @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> article(
     		@RequestParam String url) throws Exception {
     	
