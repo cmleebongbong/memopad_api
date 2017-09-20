@@ -26,8 +26,12 @@ public class AuthInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		HandlerMethod method = (HandlerMethod)handler;
-		CheckAuth auth = method.getMethodAnnotation(CheckAuth.class);
+		CheckAuth auth = null;
+		
+		if (handler instanceof HandlerMethod) {
+			HandlerMethod method = (HandlerMethod)handler;
+			auth = method.getMethodAnnotation(CheckAuth.class);
+		}
 		
 		if(auth == null || auth.value() == false){
 			return true;

@@ -77,14 +77,14 @@ public class AuthController {
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
     	
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
-    		String accessToken = authService.createToken(userInfo);
-    		userInfo.setAccessToken(accessToken);
+    		String token = authService.createToken(userInfo);
+    		userInfo.setToken(token);
     		userService.updateAccessToken(userInfo);
 	   		
 	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("로그인에 성공했습니다.");
 	   		HashMap<String, String> data = new HashMap<String, String>();
-	   		data.put("accessToken", accessToken);
+	   		data.put("token", token);
 	   		res.setData(data);
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}else{

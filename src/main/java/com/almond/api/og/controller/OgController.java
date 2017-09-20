@@ -22,6 +22,13 @@ public class OgController {
 	@Autowired
 	OgService ogService;
 
+    /**
+     * OG 태그 조회 by URL
+     * 
+     * @param url
+     * @return ResponseEntity<CommonResponse>
+     * @throws Exception
+     */
     @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> article(
     		@RequestParam String url) throws Exception {
