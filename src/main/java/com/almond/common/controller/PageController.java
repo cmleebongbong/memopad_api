@@ -14,7 +14,7 @@ public class PageController {
      * 
      * @return String
      */
-    @RequestMapping(value="/api", method=RequestMethod.GET)
+    @RequestMapping(value="/api-doc", method=RequestMethod.GET)
     public String swagger() throws Exception {
     	
    		return "redirect:/swagger-ui.html";

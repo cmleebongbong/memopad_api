@@ -20,9 +20,6 @@ import com.almond.common.domain.CommonResponse;
 import com.almond.api.user.domain.User;
 import com.almond.api.user.service.UserService;
 import com.almond.util.UtilService;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 @SpringBootApplication
 @RestController
@@ -37,7 +34,7 @@ public class AuthController {
 	UtilService utilService;
  
     /**
-     * Auth 체크
+     * Auth Check
      * 
      * @param user
      * @return ResponseEntity<CommonResponse>
@@ -109,7 +106,7 @@ public class AuthController {
      * @param request
      * @return ResponseEntity<CommonResponse>
      */
-    @RequestMapping(value="/check", method=RequestMethod.GET)
+    /*@RequestMapping(value="/check", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> authCheck(
     		HttpServletRequest request) throws Exception {
 
@@ -136,5 +133,5 @@ public class AuthController {
         	res.setMessage("Invalid token");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
         }
-    }
+    }*/
 }

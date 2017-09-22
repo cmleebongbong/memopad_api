@@ -18,8 +18,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.almond.interceptors.AuthInterceptor;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
  
 @Configuration
+@EnableSwagger2
 @ComponentScan("com.almond")
 @MapperScan(value = {"com.almond"})
 public class WebConfig extends WebMvcConfigurerAdapter {
