@@ -46,8 +46,9 @@ public class AuthInterceptor implements HandlerInterceptor{
 	        System.out.println("getIssuer : " + jwt.getIssuer());
 	        System.out.println("getSubject : " + jwt.getSubject());
     	} catch(JWTDecodeException exception) {
+    		// Invalid signature/claims
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
-    		res.setMessage("Invalid signature/claims");
+    		res.setMessage("유효하지 않은 토큰입니다.");
     		
     		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     		response.setContentType("application/json");
@@ -56,8 +57,9 @@ public class AuthInterceptor implements HandlerInterceptor{
     		response.getWriter().close();
     		return false;
         } catch(JWTVerificationException exception) {
+        	// Invalid Token
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
-    		res.setMessage("Invalid Token");
+    		res.setMessage("유효하지 않은 토큰입니다.");
 
     		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     		response.setContentType("application/json");

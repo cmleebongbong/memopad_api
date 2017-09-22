@@ -37,22 +37,31 @@ public class AuthController {
 	UtilService utilService;
  
     /**
-     * 권한 조회
-     * 
-     * CheckAuth
+     * Auth 체크
      * 
      * @param user
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
     @CheckAuth(value=true)
-    @RequestMapping(value="/", method=RequestMethod.POST)
-    public ResponseEntity<CommonResponse> article(
-    		@RequestBody User user) throws Exception {
+    @RequestMapping(value="", method=RequestMethod.GET)
+    public ResponseEntity<CommonResponse> auth(
+    		HttpServletRequest request) throws Exception {
     	
     	CommonResponse res = new CommonResponse();
-
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	
+    	String token = request.getHeader("X-Authorization");
+    	User user = userService.selectUserByToken(token);
+    	
+    	if (user == null) {
+    		res.setResult(ResponseResult.ERROR);
+    		res.setMessage("유효하지 않은 토큰입니다.");
+    		return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
+    	} else {
+    		res.setResult(ResponseResult.OK);
+    		res.setData(user);
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	}
     }
     
     /**

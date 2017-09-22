@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	WHERE id = #{id}
     </select>
  	
-    <select id="selectUserByKey" parameterType="String" resultType="user">
+    <select id="selectUserByToken" parameterType="String" resultType="user">
     	/* 사용자 조회 by Key */
     	SELECT idx,
     	       id,

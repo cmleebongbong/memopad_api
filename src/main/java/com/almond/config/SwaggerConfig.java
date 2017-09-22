@@ -3,6 +3,7 @@ package com.almond.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -20,18 +21,18 @@ public class SwaggerConfig {
           .apis(RequestHandlerSelectors.basePackage("com.almond.api"))
           .paths(PathSelectors.any())
           .build()
-          .apiInfo(apiInfo());                                           
+          .pathMapping("/")
+          .apiInfo(apiInfo());
     }
 	
 	private ApiInfo apiInfo() {
-	    ApiInfo apiInfo = new ApiInfo(
-	      "Memopad API",
-	      "api for memopad service",
-	      "0.1",
-	      "",
-	      "",
-	      "",
-	      "");
-	    return apiInfo;
+		String description = "REST API for Memopad";
+        return new ApiInfoBuilder()
+            .title("REST API")
+            .description(description)
+            .termsOfServiceUrl("github")
+            .licenseUrl("")
+            .version("1.0")
+            .build();
 	}
 }

@@ -26,8 +26,8 @@ public class UserService {
      * @return
      * @throws Exception
      */
-    public User selectUserByKey(String key) throws Exception {
-    	User user = userMapper.selectUserByKey(key);
+    public User selectUserByToken(String token) throws Exception {
+    	User user = userMapper.selectUserByToken(token);
     	return user;
     }
     
