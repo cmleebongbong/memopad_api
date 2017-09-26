@@ -11,7 +11,12 @@ spring:
     url: jdbc:log4jdbc:mysql://awsdb.c5buikycbjqa.ap-northeast-2.rds.amazonaws.com/o2
     username: admin
     password: dldmswk!12
-
+    test-while-idle: true
+    time-between-eviction-runs-millis: 360000
+    validation-query: SELECT 1
+    max-idle: 30
+    max-wait: 50000
+    max-active: 30
 ---
 
 # BANNER

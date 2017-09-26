@@ -47,8 +47,10 @@ public class AuthController {
     	
     	CommonResponse res = new CommonResponse();
     	
-    	String token = request.getHeader("X-Authorization");
+    	String token = request.getHeader("Authorization");
     	User user = userService.selectUserByToken(token);
+    	
+    	System.out.println(token);
     	
     	if (user == null) {
     		res.setResult(ResponseResult.ERROR);
@@ -90,6 +92,7 @@ public class AuthController {
 	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("로그인에 성공했습니다.");
 	   		HashMap<String, String> data = new HashMap<String, String>();
+	   		
 	   		data.put("token", token);
 	   		res.setData(data);
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);

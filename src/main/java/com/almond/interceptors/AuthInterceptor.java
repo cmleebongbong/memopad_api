@@ -38,7 +38,9 @@ public class AuthInterceptor implements HandlerInterceptor{
 		}
 		
 		// Token Check
-    	String accessToken = request.getHeader("X-Authorization");
+    	String accessToken = request.getHeader("Authorization");
+    	
+    	System.out.println("token ============ " + accessToken);
     	
     	try {
     		DecodedJWT jwt = authService.tokenCheck(accessToken);
