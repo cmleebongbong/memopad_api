@@ -47,20 +47,14 @@ public class AuthController {
     	
     	CommonResponse res = new CommonResponse();
     	
-    	String token = request.getHeader("Authorization");
-    	User user = userService.selectUserByToken(token);
+    	String id = request.getAttribute("id").toString();
     	
-    	System.out.println(token);
-    	
-    	if (user == null) {
-    		res.setResult(ResponseResult.ERROR);
-    		res.setMessage("유효하지 않은 토큰입니다.");
-    		return new ResponseEntity<CommonResponse>(res, HttpStatus.UNAUTHORIZED);
-    	} else {
-    		res.setResult(ResponseResult.OK);
-    		res.setData(user);
-        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
-    	}
+    	HashMap<String, String> data = new HashMap<String, String>();
+    	data.put("id", id);
+
+		res.setResult(ResponseResult.OK);
+		res.setData(data);
+    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     }
     
     /**
@@ -87,14 +81,11 @@ public class AuthController {
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
     		String token = authService.createToken(userInfo);
     		userInfo.setToken(token);
-    		userService.updateAccessToken(userInfo);
+    		userInfo.setPassword("");
 	   		
 	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("로그인에 성공했습니다.");
-	   		HashMap<String, String> data = new HashMap<String, String>();
-	   		
-	   		data.put("token", token);
-	   		res.setData(data);
+	   		res.setData(userInfo);
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     	}else{
 	   		res.setResult(ResponseResult.ERROR);

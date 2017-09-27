@@ -14,6 +14,7 @@ import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,19 +41,23 @@ public class AuthInterceptor implements HandlerInterceptor{
 		// Token Check
     	String accessToken = request.getHeader("Authorization");
     	
-    	System.out.println("token ============ " + accessToken);
-    	
     	try {
     		DecodedJWT jwt = authService.tokenCheck(accessToken);
     		
+	        Claim claim = jwt.getClaim("id");
+    		
 	        System.out.println("getIssuer : " + jwt.getIssuer());
 	        System.out.println("getSubject : " + jwt.getSubject());
+	        System.out.println("getID : " + claim.asString());
+	        
+    		request.setAttribute("id", claim.asString());
     	} catch(JWTDecodeException exception) {
     		// Invalid signature/claims
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
     		res.setMessage("유효하지 않은 토큰입니다.");
     		
-    		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    		response.setCharacterEncoding("utf-8");
+    		response.setStatus(HttpServletResponse.SC_OK);
     		response.setContentType("application/json");
     		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
     		response.getWriter().flush();
@@ -63,7 +68,7 @@ public class AuthInterceptor implements HandlerInterceptor{
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
     		res.setMessage("유효하지 않은 토큰입니다.");
 
-    		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    		response.setStatus(HttpServletResponse.SC_OK);
     		response.setContentType("application/json");
     		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
     		response.getWriter().flush();
