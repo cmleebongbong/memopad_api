@@ -16,7 +16,7 @@ import com.almond.common.domain.CommonResponse;
 @RequestMapping(value="/api/article")
 public class ArticleController {
 
-    @RequestMapping(value="/", method=RequestMethod.POST)
+    @RequestMapping(value="", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> article(
     		@RequestBody User user) throws Exception {
     	
