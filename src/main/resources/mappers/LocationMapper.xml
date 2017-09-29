@@ -8,18 +8,18 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <select id="locationList" parameterType="String" resultType="Location">
     	/* 지역 목록 조회 */
     	SELECT loc.idx,
-    	       loc.nationCode,
+    	       loc.nation_code,
     	       nat.name as nationName,
     	       loc.name,
-    	       loc.regDate
+    	       loc.reg_date
     	FROM memopad_location loc
     	LEFT JOIN memopad_nation nat
-    	ON loc.nationCode = nat.code
-    	WHERE loc.delYN = 'N'
-    	  AND nat.delYN = 'N'
+    	ON loc.nation_code = nat.code
+    	WHERE loc.del_yn = 'N'
+    	  AND nat.del_yn = 'N'
     	  <if test="value != null">
     	  /* 특정 국가의 지역 목록 조회 */
-    	  AND loc.nationCode = #{value}
+    	  AND loc.nation_code = #{value}
 		  </if>
     	ORDER BY nat.sort DESC, loc.sort DESC
     </select>

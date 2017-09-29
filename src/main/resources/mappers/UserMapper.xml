@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	       id,
     	       password,
     	       token,
-    	       regDate
+    	       reg_date
     	FROM memopad_user
     	WHERE id = #{id}
     </select>
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT idx,
     	       id,
     	       token,
-    	       regDate
+    	       reg_date
     	FROM memopad_user
     	WHERE token = #{token}
     </select>
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	INSERT INTO memopad_user (
    	        id,
    	        password,
-   	        regDate
+   	        reg_date
     	)
     	VALUES (
     		#{id},
