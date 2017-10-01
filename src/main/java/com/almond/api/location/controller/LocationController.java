@@ -1,7 +1,7 @@
 package com.almond.api.location.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -57,7 +57,7 @@ public class LocationController {
     public ResponseEntity<CommonResponse> locationForArray() throws Exception {
     	CommonResponse res = new CommonResponse();
     	
-    	HashMap<String, ArrayList<Location>> locationList = new HashMap<String, ArrayList<Location>>();
+    	LinkedHashMap<String, ArrayList<Location>> locationList = new LinkedHashMap<String, ArrayList<Location>>();
     	ArrayList<Nation> nationList = nationService.nationList();
     	for(Nation nation : nationList) {
     		ArrayList<Location> locations = locationService.locationList(nation.getCode());
