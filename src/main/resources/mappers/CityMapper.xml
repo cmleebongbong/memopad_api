@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.almond.api.city.dao.CityMapper">
+ 	
+    <select id="cityList" parameterType="String" resultType="City">
+    	/* 지역 목록 조회 */
+    	SELECT cit.idx,
+    	       cit.nation_code,
+    	       nat.name as nationName,
+    	       cit.name,
+    	       cit.reg_date
+    	FROM memopad_city cit
+    	LEFT JOIN memopad_nation nat
+    	ON cit.nation_code = nat.code
+    	WHERE cit.del_yn = 'N'
+    	  AND nat.del_yn = 'N'
+    	  <if test="value != null">
+    	  /* 특정 국가의 지역 목록 조회 */
+    	  AND cit.nation_code = #{value}
+		  </if>
+    	ORDER BY nat.sort DESC, cit.sort DESC
+    </select>
+
+</mapper>
