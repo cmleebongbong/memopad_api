@@ -11,6 +11,7 @@ public class Og implements Serializable {
 	
 	private String ogUrl;
 	private String ogImageUrl;
+	private byte[] ogImageData;
 	private String ogDescription;
 	private String ogTitle;
 }

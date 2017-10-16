@@ -1,5 +1,6 @@
 package com.almond.util;
 
+import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -63,5 +64,20 @@ public class UtilService {
 		}
 		
 		return temp.toString();
+	}
+	
+	/**
+	 * GET HostName by url
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String getHostName(String url) throws Exception {
+	    URI uri = new URI(url);
+	    String protocol = uri.getScheme();
+	    String hostname = uri.getHost();
+	    String host = protocol + "://" + hostname;
+
+	    return host;
 	}
 }
