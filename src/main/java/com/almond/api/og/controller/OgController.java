@@ -38,6 +38,7 @@ public class OgController {
     	
     	try {
         	ogData = ogService.getOg(url);
+//        	ogService.ogTest(url);
         	res.setResult(ResponseResult.OK);
         	res.setData(ogData);
     	} catch(Exception e) {

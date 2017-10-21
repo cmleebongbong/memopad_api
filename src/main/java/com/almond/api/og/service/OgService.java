@@ -37,32 +37,10 @@ public class OgService {
 		RestTemplate template = new RestTemplate();
 		template.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		String result = template.getForObject(url, String.class);
-    	
+		// HTML 추출 후 Document 형변환
     	Document doc = Jsoup.parse(result);
-        Elements ogTags = doc.select("meta[property^=og:]");
-        
-        if (ogTags.size() <= 0) {
-            Element iframe = doc.select("iframe").first();
-            if (iframe != null) {
-                String iframeSrc = iframe.attr("src");
-                Document iframeDoc = Jsoup.connect(iframeSrc).get();
-            	ogTags = iframeDoc.select("meta[property^=og:]");
-            }
-            Element frame = doc.select("frame").first();
-            if (frame != null) {
-                String frameSrc = frame.attr("src");
-                if (!frameSrc.substring(0, 3).equals("http")) {
-                	frameSrc = utilService.getHostName(url) + frameSrc;
-                }
-                
-                Document frameDoc = Jsoup.connect(frameSrc).get();
-            	ogTags = frameDoc.select("meta[property^=og:]");
-                if (ogTags.size() <= 0) {
-                    return null;
-                }
-            }
-        }
-
+		Elements ogTags = searchOG(doc, url);
+		
 		Og ogData = new Og();
         // 필요한 OGTag를 추려낸다
         for (int i = 0; i < ogTags.size(); i++) {
@@ -87,5 +65,46 @@ public class OgService {
         }
 		
 		return ogData;
+	}
+
+	/**
+	 * 재귀함수로 document안의 frame속 까지 og 태그를 찾는다.
+	 * 
+	 * @param doc
+	 * @param url
+	 * @return
+	 * @throws Exception
+	 */
+	public Elements searchOG(Document doc, String url) throws Exception {
+		Elements ogTags = doc.select("meta[property^=og:]");
+		
+		// OG 태그가 없는경우 frame iframe 검색
+		if (ogTags.size() < 1) {
+			Elements frames = doc.select("iframe, frame");
+			
+			if(frames.size() > 0) {
+				for(int i = 0; i < frames.size(); i++) {
+					String frameSrc = frames.get(i).attr("src");
+
+					// src가 http로 시작하지 않는 경우 hostname 추가처리
+					if (!frameSrc.substring(0, 4).equals("http")) {
+						frameSrc = utilService.getHostName(url) + frameSrc;
+					}
+					
+					Document innerDoc = Jsoup.connect(frameSrc).get();
+					Elements innerOgTags = searchOG(innerDoc, frameSrc);
+					if (innerOgTags.size() > 0) {
+						return innerOgTags;
+					}
+					if (innerOgTags.size() < 1) {
+						return null;
+					}
+				}
+			// frame도 없는경우 null 반환
+			} else {
+				return null;
+			}
+		}
+		return ogTags;
 	}
 }

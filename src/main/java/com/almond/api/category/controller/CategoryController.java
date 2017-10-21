@@ -30,7 +30,7 @@ public class CategoryController {
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> category() throws Exception {
+    public ResponseEntity<CommonResponse> categoryList() throws Exception {
     	CommonResponse res = new CommonResponse();
     	
     	ArrayList<Category> categoryList = categoryService.categoryList();
