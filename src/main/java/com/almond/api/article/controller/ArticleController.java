@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.almond.api.user.domain.User;
 import com.almond.common.domain.CommonResponse;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "Article")
 @RestController
 @RequestMapping(value="/api/article")
 public class ArticleController {

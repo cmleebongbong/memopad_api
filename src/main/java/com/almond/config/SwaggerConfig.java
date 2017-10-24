@@ -24,9 +24,9 @@ public class SwaggerConfig {
     }
 	
 	private ApiInfo apiInfo() {
-		String description = "REST API for Memopad";
+		String description = "REST API for Nolja";
         return new ApiInfoBuilder()
-            .title("REST API")
+            .title("Nolja API")
             .description(description)
             .termsOfServiceUrl("github")
             .licenseUrl("")

@@ -21,6 +21,9 @@ import com.almond.api.user.domain.User;
 import com.almond.api.user.service.UserService;
 import com.almond.util.UtilService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "Auth")
 @SpringBootApplication
 @RestController
 @RequestMapping(value="/api/auth")
@@ -40,7 +43,7 @@ public class AuthController {
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
-    @CheckAuth(value=true)
+    @CheckAuth
     @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> auth(
     		HttpServletRequest request) throws Exception {

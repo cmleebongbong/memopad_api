@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface CheckAuth {
-	boolean value() default false;
+	boolean value() default true;
 }
