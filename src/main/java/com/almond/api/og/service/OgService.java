@@ -1,12 +1,6 @@
 package com.almond.api.og.service;
 
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
 import java.nio.charset.Charset;
-
-import javax.imageio.ImageIO;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,12 +44,12 @@ public class OgService {
             if ("og:url".equals(text)) {
             	ogData.setOgUrl(tag.attr("content"));
             } else if ("og:image".equals(text)) {
-            	URL imgUrl = new URL(tag.attr("content"));
-            	BufferedImage bufferedimage = ImageIO.read(imgUrl);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(bufferedimage, "png", baos);
-                byte[] imageData = baos.toByteArray();
-                ogData.setOgImageData(imageData);
+//            	URL imgUrl = new URL(tag.attr("content"));
+//            	BufferedImage bufferedimage = ImageIO.read(imgUrl);
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                ImageIO.write(bufferedimage, "png", baos);
+//                byte[] imageData = baos.toByteArray();
+//                ogData.setOgImageData(imageData);
             	ogData.setOgImageUrl(tag.attr("content"));
             } else if ("og:description".equals(text)) {
             	ogData.setOgDescription(tag.attr("content"));
