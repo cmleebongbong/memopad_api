@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.almond.api.scrap.dao.ScrapMapper">
+ 	
+    <insert id="scrapRegister" parameterType="scrap">
+    	/* 스크랩 등록 */
+    	INSERT INTO memopad_scrap (
+   	        nation_code,
+   	        city_idx,
+   	        category_idx,
+   	        image_url,
+   	        title,
+   	        description,
+   	        writer,
+   	        url,
+   	        del_yn,
+   	        reg_date
+    	)
+    	VALUES (
+    		#{nationCode},
+    		#{cityIdx},
+    		#{categoryIdx},
+    		#{imageUrl},
+    		#{title},
+    		#{description},
+    		#{writer},
+    		#{url},
+    		'N',
+    		NOW()
+    	)
+    </insert>
+    
+</mapper>

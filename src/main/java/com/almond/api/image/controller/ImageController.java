@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.almond.api.image.service.ImageService;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "Image")
 @RestController
 @RequestMapping(value="/api/image")
 public class ImageController {

@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
+
+import io.swagger.annotations.Api;
+
 import com.almond.api.og.domain.Og;
 import com.almond.api.og.service.OgService;
 
 @SpringBootApplication
+@Api(tags = "Og")
 @RestController
 @RequestMapping(value="/api/og")
 public class OgController {

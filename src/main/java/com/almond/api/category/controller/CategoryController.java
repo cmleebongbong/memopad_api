@@ -15,7 +15,10 @@ import com.almond.api.category.service.CategoryService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "Category")
 @RestController
 @RequestMapping(value="/api/category")
 public class CategoryController {

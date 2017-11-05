@@ -12,6 +12,7 @@ public class User implements Serializable {
 	
 	private long idx;
 	private String id;
+	private String nickname;
 	private String password;
 	private String token;
 	private Date regDate;

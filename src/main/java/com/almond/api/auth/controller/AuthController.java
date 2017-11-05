@@ -51,9 +51,11 @@ public class AuthController {
     	CommonResponse res = new CommonResponse();
     	
     	String id = request.getAttribute("id").toString();
+    	User user = userService.selectUserById(id);
     	
     	HashMap<String, String> data = new HashMap<String, String>();
     	data.put("id", id);
+    	data.put("nickname", user.getNickname());
 
 		res.setResult(ResponseResult.OK);
 		res.setData(data);

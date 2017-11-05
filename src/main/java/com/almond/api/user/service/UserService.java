@@ -20,6 +20,16 @@ public class UserService {
     	User user = userMapper.selectUserById(id);
     	return user;
     }
+	
+    /**
+     * @param nickname
+     * @return User
+     * @throws Exception
+     */
+    public User selectUserByNickname(String nickname) throws Exception {
+    	User user = userMapper.selectUserByNickname(nickname);
+    	return user;
+    }
     
     /**
      * @param key

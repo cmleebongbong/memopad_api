@@ -15,7 +15,10 @@ import com.almond.api.nation.service.NationService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "Nation")
 @RestController
 @RequestMapping(value="/api/nation")
 public class NationController {

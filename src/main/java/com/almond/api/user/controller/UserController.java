@@ -16,7 +16,10 @@ import com.almond.api.user.domain.User;
 import com.almond.api.user.service.UserService;
 import com.almond.util.UtilService;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "User")
 @RestController
 @RequestMapping(value="/api/user")
 public class UserController {
@@ -32,6 +35,7 @@ public class UserController {
      * 
      * @param user
      * @return ResponseEntity<CommonResponse>
+     * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> signup(
@@ -39,14 +43,20 @@ public class UserController {
     	
    		CommonResponse res = new CommonResponse();
    	
-    	User result = userService.selectUserById(user.getId());
+    	User idResult = userService.selectUserById(user.getId());
+    	User nicknameResult = userService.selectUserByNickname(user.getNickname());
 	   	
-	   	if(result != null) {
+	   	if (idResult != null) {
 	   		// ID 중복
 	   		res.setResult(ResponseResult.ERROR);
 	   		res.setMessage("이미 사용중인 ID입니다.");
         	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
-	   	}else{
+	   	} else if (nicknameResult != null) {
+	   		// Nickname 중복
+	   		res.setResult(ResponseResult.ERROR);
+	   		res.setMessage("이미 사용중인 닉네임입니다.");
+        	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
+	   	} else {
 	   		// 암호화
 	   		user.setPassword(utilService.encryptSHA256(user.getPassword()));
 	   		userService.signup(user);

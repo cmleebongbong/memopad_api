@@ -17,7 +17,10 @@ import com.almond.api.city.service.CityService;
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
 
+import io.swagger.annotations.Api;
+
 @SpringBootApplication
+@Api(tags = "City")
 @RestController
 @RequestMapping(value="/api/city")
 public class CityController {

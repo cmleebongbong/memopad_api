@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	/* 사용자 조회 by ID */
     	SELECT idx,
     	       id,
+    	       nickname,
     	       password,
     	       token,
     	       reg_date
@@ -16,10 +17,23 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	WHERE id = #{id}
     </select>
  	
+    <select id="selectUserByNickname" parameterType="String" resultType="user">
+    	/* 사용자 조회 by nickname */
+    	SELECT idx,
+    	       id,
+    	       nickname,
+    	       password,
+    	       token,
+    	       reg_date
+    	FROM memopad_user
+    	WHERE nickname = #{nickname}
+    </select>
+ 	
     <select id="selectUserByToken" parameterType="String" resultType="user">
     	/* 사용자 조회 by Key */
     	SELECT idx,
     	       id,
+    	       nickname,
     	       token,
     	       reg_date
     	FROM memopad_user
@@ -30,11 +44,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	/* 회원가입 */
     	INSERT INTO memopad_user (
    	        id,
+   	        nickname,
    	        password,
    	        reg_date
     	)
     	VALUES (
     		#{id},
+    		#{nickname},
     		#{password},
     		NOW()
     	)

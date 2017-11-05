@@ -24,7 +24,7 @@ public class UtilService {
 	    String SHA = null;
 	    try {
 	        MessageDigest sh = MessageDigest.getInstance("SHA-256"); // 이 부분을 SHA-1으로 바꿔도 된다!
-	        sh.update(str.getBytes()); 
+	        sh.update(str.getBytes());
 	        byte byteData[] = sh.digest();
 	        StringBuffer sb = new StringBuffer(); 
 	        for(int i = 0 ; i < byteData.length ; i++){
