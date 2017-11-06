@@ -1,5 +1,7 @@
 package com.almond.api.scrap.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -28,21 +30,25 @@ public class ScrapController {
 	
     /**
      * 스크랩 조회 전체
+     * 
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> scrap() throws Exception {
+    public ResponseEntity<CommonResponse> scrapList() throws Exception {
     	
+    	ArrayList<Scrap> scrapList = scrapService.scrapList();
     	CommonResponse res = new CommonResponse();
     	res.setResult(ResponseResult.OK);
     	res.setMessage("조회 되었습니다.");
+    	res.setData(scrapList);
 
     	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     }
 	
     /**
      * 스크랩 조회 by 국가코드
+     * 
      * @param nationCode
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
@@ -50,8 +56,6 @@ public class ScrapController {
     @RequestMapping(value="/{nationCode}", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> scrap(
     		@PathVariable String nationCode) throws Exception {
-    	
-    	System.out.println(nationCode);
     	
     	CommonResponse res = new CommonResponse();
     	res.setResult(ResponseResult.OK);
@@ -62,6 +66,7 @@ public class ScrapController {
 
     /**
      * 스크랩 등록
+     * 
      * @param Scrap
      * @return ResponseEntity<CommonResponse>
      * @throws Exception

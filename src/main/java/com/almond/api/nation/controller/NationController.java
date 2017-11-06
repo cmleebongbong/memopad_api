@@ -33,7 +33,7 @@ public class NationController {
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> location() throws Exception {
+    public ResponseEntity<CommonResponse> nationList() throws Exception {
     	CommonResponse res = new CommonResponse();
     	
     	ArrayList<Nation> nationList = nationService.nationList();

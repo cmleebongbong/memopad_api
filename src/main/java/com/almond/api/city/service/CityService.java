@@ -19,6 +19,8 @@ public class CityService {
     private NationService nationService;
 	
     /**
+     * 전체 도시목록
+     * 
      * @return ArrayList<Location>
      * @throws Exception
      */
@@ -28,6 +30,8 @@ public class CityService {
     }
 	
     /**
+     * 특정국가의 도시목록
+     * 
      * @param nationCode
      * @return ArrayList<Location>
      * @throws Exception
@@ -38,6 +42,8 @@ public class CityService {
     }
 	
     /**
+     * 국가별 도시 목록
+     * 
      * @return LinkedHashMap<String, ArrayList<City>>
      * @throws Exception
      */
