@@ -19,18 +19,8 @@ public class ScrapService {
      * @return
      * @throws Exception
      */
-    public ArrayList<Scrap> scrapList() throws Exception {
-    	return scrapMapper.scrapList();
-    }
-    
-    /**
-     * 스크랩 목록 by 국가별
-     * 
-     * @return
-     * @throws Exception
-     */
-    public ArrayList<Scrap> scrapList(String nationCode) throws Exception {
-    	return scrapMapper.scrapList(nationCode);
+    public ArrayList<Scrap> scrapList(String nationCode, String[] cityIdx, String[] categoryIdx) throws Exception {
+    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx);
     }
 	
     /**

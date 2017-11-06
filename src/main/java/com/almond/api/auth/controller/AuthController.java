@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,7 @@ public class AuthController {
     @CheckAuth
     @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> auth(
+    		@RequestHeader(value="Authorization") String authorization,
     		HttpServletRequest request) throws Exception {
     	
     	CommonResponse res = new CommonResponse();
@@ -83,10 +85,13 @@ public class AuthController {
     	User userInfo = userService.selectUserById(user.getId());
     	String passwordEncrypt = utilService.encryptSHA256(user.getPassword());
     	
+    	// 로그인 성공
     	if(userInfo != null && userInfo.getPassword().equals(passwordEncrypt)) {
     		String token = authService.createToken(userInfo);
+    		
     		userInfo.setToken(token);
     		userInfo.setPassword("");
+    		userService.updateAccessToken(userInfo);
 	   		
 	   		res.setResult(ResponseResult.OK);
 	   		res.setMessage("로그인에 성공했습니다.");

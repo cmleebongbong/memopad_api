@@ -2,16 +2,20 @@ package com.almond.api.scrap.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.almond.annotations.CheckAuth;
 import com.almond.api.scrap.domain.Scrap;
 import com.almond.api.scrap.service.ScrapService;
 import com.almond.common.data.ResponseResult;
@@ -29,37 +33,27 @@ public class ScrapController {
 	private ScrapService scrapService;
 	
     /**
-     * 스크랩 조회 전체
+     * 스크랩 조회
      * 
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> scrapList() throws Exception {
+    public ResponseEntity<CommonResponse> scrapList(
+    		@RequestHeader(value="Authorization", required=false) String authorization,
+    		@RequestParam(required=false) String nationCode,
+    		@RequestParam(required=false) String[] cityIdx,
+    		@RequestParam(required=false) String[] categoryIdx) throws Exception {
     	
-    	ArrayList<Scrap> scrapList = scrapService.scrapList();
+    	System.out.println("nation code : " + nationCode);
+    	System.out.println("city idx : " + cityIdx);
+    	System.out.println("nation idx : " + categoryIdx);
+    	
+    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, cityIdx, categoryIdx);
     	CommonResponse res = new CommonResponse();
     	res.setResult(ResponseResult.OK);
     	res.setMessage("조회 되었습니다.");
     	res.setData(scrapList);
-
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
-    }
-	
-    /**
-     * 스크랩 조회 by 국가코드
-     * 
-     * @param nationCode
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
-     */
-    @RequestMapping(value="/{nationCode}", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> scrap(
-    		@PathVariable String nationCode) throws Exception {
-    	
-    	CommonResponse res = new CommonResponse();
-    	res.setResult(ResponseResult.OK);
-    	res.setMessage("조회 되었습니다.");
 
     	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     }
@@ -71,11 +65,15 @@ public class ScrapController {
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
+    @CheckAuth
     @RequestMapping(value="", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> scrapRegister(
+    		HttpServletRequest request,
+    		@RequestHeader(value="Authorization") String authorization,
     		@RequestBody Scrap scrap) throws Exception {
     	
     	CommonResponse res = new CommonResponse();
+    	scrap.setWriter(request.getAttribute("idx").toString());
     	int result = scrapService.scrapRegister(scrap);
     	if (result > 0) {
         	res.setResult(ResponseResult.OK);

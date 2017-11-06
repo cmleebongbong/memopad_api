@@ -40,17 +40,31 @@ public class AuthInterceptor implements HandlerInterceptor{
 		
 		// Token Check
     	String accessToken = request.getHeader("Authorization");
+    	if (accessToken == null) {
+    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+    		res.setMessage("유효하지 않은 토큰입니다.");
+    		response.setCharacterEncoding("utf-8");
+    		response.setStatus(HttpServletResponse.SC_OK);
+    		response.setContentType("application/json");
+    		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
+    		response.getWriter().flush();
+    		response.getWriter().close();
+    		return false;
+    	}
     	
     	try {
     		DecodedJWT jwt = authService.tokenCheck(accessToken);
     		
-	        Claim claim = jwt.getClaim("id");
+	        Claim id = jwt.getClaim("id");
+	        Claim idx = jwt.getClaim("idx");
     		
 	        System.out.println("getIssuer : " + jwt.getIssuer());
 	        System.out.println("getSubject : " + jwt.getSubject());
-	        System.out.println("getID : " + claim.asString());
-	        
-    		request.setAttribute("id", claim.asString());
+	        System.out.println("getID : " + id.asString());
+	        System.out.println("getIDX : " + idx.asInt());
+
+    		request.setAttribute("id", id.asString());
+    		request.setAttribute("idx", idx.asInt());
     	} catch(JWTDecodeException exception) {
     		// Invalid signature/claims
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
@@ -68,6 +82,7 @@ public class AuthInterceptor implements HandlerInterceptor{
     		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
     		res.setMessage("유효하지 않은 토큰입니다.");
 
+    		response.setCharacterEncoding("utf-8");
     		response.setStatus(HttpServletResponse.SC_OK);
     		response.setContentType("application/json");
     		response.getWriter().write(new ObjectMapper().writeValueAsString(res));

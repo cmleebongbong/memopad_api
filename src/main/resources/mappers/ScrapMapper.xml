@@ -5,6 +5,17 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
  
 <mapper namespace="com.almond.api.scrap.dao.ScrapMapper">
  	
+    <select id="scrapList" parameterType="String" resultType="scrap">
+    	/* 스크랩 조회 */
+    	SELECT scrap.*,
+			   IF(ISNULL(user.idx), 'false', 'true') as owner
+		FROM memopad_scrap scrap
+		LEFT JOIN memopad_user user
+		ON scrap.writer = user.idx
+		WHERE scrap.del_yn = 'N'
+		ORDER BY scrap.reg_date DESC;
+    </select>
+ 	
     <insert id="scrapRegister" parameterType="scrap">
     	/* 스크랩 등록 */
     	INSERT INTO memopad_scrap (
