@@ -1,6 +1,7 @@
 package com.almond.api.scrap.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.almond.annotations.CheckAuth;
+import com.almond.api.auth.service.AuthService;
 import com.almond.api.scrap.domain.Scrap;
 import com.almond.api.scrap.service.ScrapService;
 import com.almond.common.data.ResponseResult;
@@ -32,6 +34,9 @@ public class ScrapController {
 	@Autowired
 	private ScrapService scrapService;
 	
+	@Autowired
+	private AuthService authService; 
+	
     /**
      * 스크랩 조회
      * 
@@ -42,18 +47,29 @@ public class ScrapController {
     public ResponseEntity<CommonResponse> scrapList(
     		@RequestHeader(value="Authorization", required=false) String authorization,
     		@RequestParam(required=false) String nationCode,
-    		@RequestParam(required=false) String[] cityIdx,
-    		@RequestParam(required=false) String[] categoryIdx) throws Exception {
+    		@RequestParam(required=false) int[] cityIdx,
+    		@RequestParam(required=false) int[] categoryIdx,
+    		@RequestParam(required=false, defaultValue="10") int limit,
+    		@RequestParam(required=false, defaultValue="1") int page) throws Exception {
     	
+    	int userIdx = authService.getUserIdxByToken(authorization);
+    	
+    	System.out.println("user idx : " + userIdx);
     	System.out.println("nation code : " + nationCode);
     	System.out.println("city idx : " + cityIdx);
     	System.out.println("nation idx : " + categoryIdx);
     	
-    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, cityIdx, categoryIdx);
+    	int total = scrapService.scrapListTotalCount(nationCode, cityIdx, categoryIdx);
+    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx);
+    	
     	CommonResponse res = new CommonResponse();
+    	HashMap<String, Object> responseData = new HashMap<String, Object>();
+    	responseData.put("total", total);
+    	responseData.put("limit", limit);
+    	responseData.put("page", page);
+    	responseData.put("list", scrapList);
     	res.setResult(ResponseResult.OK);
-    	res.setMessage("조회 되었습니다.");
-    	res.setData(scrapList);
+    	res.setData(responseData);
 
     	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     }

@@ -14,13 +14,23 @@ public class ScrapService {
     private ScrapMapper scrapMapper;
     
     /**
-     * 스크랩 목록 전체조회
+     * 스크랩 목록 갯수
      * 
      * @return
      * @throws Exception
      */
-    public ArrayList<Scrap> scrapList(String nationCode, String[] cityIdx, String[] categoryIdx) throws Exception {
-    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx);
+    public int scrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx) throws Exception {
+    	return scrapMapper.scrapListTotalCount(nationCode, cityIdx, categoryIdx);
+    }
+    
+    /**
+     * 스크랩 목록 조회
+     * 
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<Scrap> scrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx) throws Exception {
+    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx);
     }
 	
     /**

@@ -10,6 +10,7 @@ import com.almond.api.user.domain.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 @Service
@@ -56,5 +57,25 @@ public class AuthService {
         DecodedJWT jwt = verifier.verify(accessToken);
         
         return jwt;
+    }
+    
+    /**
+     * 유저 idx 조회 by accessToken
+     * 
+     * @param accessToken
+     * @return userIdx
+     * @throws Exception
+     */
+    public int getUserIdxByToken(String accessToken) throws Exception {
+    	if (accessToken == null) {
+    		return -1;
+    	}
+    	try {
+    		DecodedJWT jwt = tokenCheck(accessToken);
+    		Claim idx = jwt.getClaim("idx");
+    		return idx.asInt();
+    	} catch (Exception exception) {
+    		return -1;
+    	}
     }
 }

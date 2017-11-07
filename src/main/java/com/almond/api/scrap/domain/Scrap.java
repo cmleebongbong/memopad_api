@@ -20,4 +20,6 @@ public class Scrap implements Serializable {
 	private String writer;
 	private String url;
 	private Date regDate;
+	
+	private boolean owner;
 }
