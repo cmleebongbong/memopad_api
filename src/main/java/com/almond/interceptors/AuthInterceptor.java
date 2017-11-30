@@ -24,8 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 	private AuthService authService;
 	 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
 		CheckAuth auth = null;
 		
@@ -41,15 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 		// Token Check
     	String accessToken = request.getHeader("Authorization");
     	if (accessToken == null) {
-    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
-    		res.setMessage("유효하지 않은 토큰입니다.");
-    		response.setCharacterEncoding("utf-8");
-    		response.setStatus(HttpServletResponse.SC_OK);
-    		response.setContentType("application/json");
-    		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
-    		response.getWriter().flush();
-    		response.getWriter().close();
-    		return false;
+    		return unAuthException(response);
     	}
     	
     	try {
@@ -67,40 +58,31 @@ public class AuthInterceptor implements HandlerInterceptor{
     		request.setAttribute("idx", idx.asInt());
     	} catch(JWTDecodeException exception) {
     		// Invalid signature/claims
-    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
-    		res.setMessage("유효하지 않은 토큰입니다.");
-    		
-    		response.setCharacterEncoding("utf-8");
-    		response.setStatus(HttpServletResponse.SC_OK);
-    		response.setContentType("application/json");
-    		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
-    		response.getWriter().flush();
-    		response.getWriter().close();
-    		return false;
+    		return unAuthException(response);
         } catch(JWTVerificationException exception) {
         	// Invalid Token
-    		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
-    		res.setMessage("유효하지 않은 토큰입니다.");
-
-    		response.setCharacterEncoding("utf-8");
-    		response.setStatus(HttpServletResponse.SC_OK);
-    		response.setContentType("application/json");
-    		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
-    		response.getWriter().flush();
-    		response.getWriter().close();
-    		return false;
+    		return unAuthException(response);
         }
-		
 		return true;
 	}
  
 	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) 
-			throws Exception {
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 	}
  
 	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+	}
+	
+	private boolean unAuthException(HttpServletResponse response) throws Exception {
+		CommonResponse res = new CommonResponse(ResponseResult.ERROR);
+		res.setMessage("유효하지 않은 토큰입니다.");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setContentType("application/json");
+		response.getWriter().write(new ObjectMapper().writeValueAsString(res));
+		response.getWriter().flush();
+		response.getWriter().close();
+		return false;
 	}
 }
