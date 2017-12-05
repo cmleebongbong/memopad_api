@@ -1,6 +1,8 @@
 package com.almond.api.scrap.domain;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Data;
@@ -20,6 +22,10 @@ public class Scrap implements Serializable {
 	private String writer;
 	private String url;
 	private Date regDate;
-	
 	private boolean owner;
+	
+	public String getRegDate() {
+		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+		return df.format(regDate);
+	}
 }

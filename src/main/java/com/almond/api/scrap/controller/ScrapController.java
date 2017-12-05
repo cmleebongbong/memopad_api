@@ -47,20 +47,15 @@ public class ScrapController {
     public ResponseEntity<CommonResponse> scrapList(
     		@RequestHeader(value="Authorization", required=false) String authorization,
     		@RequestParam(required=false) String nationCode,
-    		@RequestParam(required=false) int[] cityIdx,
-    		@RequestParam(required=false) int[] categoryIdx,
+    		@RequestParam(required=false, value = "city[]") int[] city,
+    		@RequestParam(required=false, value = "category[]") int[] category,
     		@RequestParam(required=false, defaultValue="10") int limit,
     		@RequestParam(required=false, defaultValue="1") int page) throws Exception {
     	
     	int userIdx = authService.getUserIdxByToken(authorization);
     	
-    	System.out.println("user idx : " + userIdx);
-    	System.out.println("nation code : " + nationCode);
-    	System.out.println("city idx : " + cityIdx);
-    	System.out.println("nation idx : " + categoryIdx);
-    	
-    	int total = scrapService.scrapListTotalCount(nationCode, cityIdx, categoryIdx);
-    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx);
+    	int total = scrapService.scrapListTotalCount(nationCode, city, category);
+    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, city, category, limit, page, userIdx);
     	
     	CommonResponse res = new CommonResponse();
     	HashMap<String, Object> responseData = new HashMap<String, Object>();

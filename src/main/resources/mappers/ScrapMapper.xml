@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		   image_url,
     		   title,
     		   description,
-    		   writer,
+    		   (SELECT nickname FROM memopad_user WHERE idx = writer) as writer,
     		   url,
     		   reg_date,
 			   IF(writer = ${userIdx}, 'true', 'false') as owner
