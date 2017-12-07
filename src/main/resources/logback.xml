@@ -22,7 +22,7 @@ jdbc.connection : Logs connection open and close events
   
   <logger name="jdbc.resultsettable" level="DEBUG" additivity="false">> 
     <appender-ref ref="STDOUT" />
-  </logger>  
+  </logger>
   
   <root level="INFO">
     <appender-ref ref="STDOUT" />

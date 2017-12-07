@@ -31,7 +31,6 @@ public class ImageController {
     public byte[] imageToByte(
     		@RequestParam String url) throws Exception {
     	
-    	System.out.println("url : " + url);
     	byte[] imageData = imageService.imageToByte(url);
     	return imageData;
     }

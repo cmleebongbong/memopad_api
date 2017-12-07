@@ -53,13 +53,14 @@ public class ScrapController {
     		@RequestParam(required=false, defaultValue="1") int page) throws Exception {
     	
     	int userIdx = authService.getUserIdxByToken(authorization);
-    	
     	int total = scrapService.scrapListTotalCount(nationCode, city, category);
+    	
     	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, city, category, limit, page, userIdx);
     	
     	CommonResponse res = new CommonResponse();
     	HashMap<String, Object> responseData = new HashMap<String, Object>();
     	responseData.put("total", total);
+    	responseData.put("totalPage", Math.ceil((double)total / (double)limit));
     	responseData.put("limit", limit);
     	responseData.put("page", page);
     	responseData.put("list", scrapList);
