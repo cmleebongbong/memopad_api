@@ -16,11 +16,11 @@ jdbc.connection : Logs connection open and close events
   
   <logger name="jdbc" level="OFF"/>
   
-  <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">>
+  <logger name="jdbc.sqlonly" level="OFF" additivity="false">
     <appender-ref ref="STDOUT" />
-  </logger>  
+  </logger>
   
-  <logger name="jdbc.resultsettable" level="DEBUG" additivity="false">> 
+  <logger name="jdbc.resultsettable" level="OFF" additivity="false"> 
     <appender-ref ref="STDOUT" />
   </logger>
   
