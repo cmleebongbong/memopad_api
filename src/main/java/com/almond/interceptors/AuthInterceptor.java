@@ -49,10 +49,10 @@ public class AuthInterceptor implements HandlerInterceptor{
 	        Claim id = jwt.getClaim("id");
 	        Claim idx = jwt.getClaim("idx");
     		
-	        System.out.println("getIssuer : " + jwt.getIssuer());
-	        System.out.println("getSubject : " + jwt.getSubject());
-	        System.out.println("getID : " + id.asString());
-	        System.out.println("getIDX : " + idx.asInt());
+//	        System.out.println("getIssuer : " + jwt.getIssuer());
+//	        System.out.println("getSubject : " + jwt.getSubject());
+//	        System.out.println("getID : " + id.asString());
+//	        System.out.println("getIDX : " + idx.asInt());
 
     		request.setAttribute("id", id.asString());
     		request.setAttribute("idx", idx.asInt());
