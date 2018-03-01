@@ -7,6 +7,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,10 +34,18 @@ public class OgService {
 	 */
 	public Og getOg(String url) throws Exception {
 		RestTemplate template = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.valueOf("text/plain;charset=utf-8"));
+		headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+		HttpEntity<String> entity = new HttpEntity<String>("", headers);
+		
 		template.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-		String result = template.getForObject(url, String.class);
+		
+		ResponseEntity<String> result = template.exchange(url, HttpMethod.GET, entity, String.class);
+		
 		// HTML 추출 후 Document 형변환
-    	Document doc = Jsoup.parse(result);
+		System.out.println(result.toString());
+    	Document doc = Jsoup.parse(result.toString());
 		Elements ogTags = searchOG(doc, url);
 		
 		Og ogData = new Og();
@@ -44,12 +57,6 @@ public class OgService {
             if ("og:url".equals(text)) {
             	ogData.setOgUrl(tag.attr("content"));
             } else if ("og:image".equals(text)) {
-//            	URL imgUrl = new URL(tag.attr("content"));
-//            	BufferedImage bufferedimage = ImageIO.read(imgUrl);
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                ImageIO.write(bufferedimage, "png", baos);
-//                byte[] imageData = baos.toByteArray();
-//                ogData.setOgImageData(imageData);
             	ogData.setOgImageUrl(tag.attr("content"));
             } else if ("og:description".equals(text)) {
             	ogData.setOgDescription(tag.attr("content"));

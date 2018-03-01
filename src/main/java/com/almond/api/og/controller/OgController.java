@@ -39,10 +39,11 @@ public class OgController {
     	
     	Og ogData = null;
     	CommonResponse res = new CommonResponse();
+
+//    	ogData = ogService.getOg(url);
     	
     	try {
         	ogData = ogService.getOg(url);
-//        	ogService.ogTest(url);
         	res.setResult(ResponseResult.OK);
         	res.setData(ogData);
     	} catch(Exception e) {
