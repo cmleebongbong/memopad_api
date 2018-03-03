@@ -38,14 +38,11 @@ public class OgService {
 		headers.setContentType(MediaType.valueOf("text/plain;charset=utf-8"));
 		headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 		HttpEntity<String> entity = new HttpEntity<String>("", headers);
-		
 		template.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-		
 		ResponseEntity<String> result = template.exchange(url, HttpMethod.GET, entity, String.class);
 		
 		// HTML 추출 후 Document 형변환
-		System.out.println(result.toString());
-    	Document doc = Jsoup.parse(result.toString());
+    	Document doc = Jsoup.parse(result.getBody());
 		Elements ogTags = searchOG(doc, url);
 		
 		Og ogData = new Og();
