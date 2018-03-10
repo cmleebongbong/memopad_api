@@ -2,6 +2,8 @@ package com.almond.api.og.domain;
 
 import java.io.Serializable;
 
+import com.almond.common.domain.Map;
+
 import lombok.Data;
 
 @Data
@@ -13,4 +15,5 @@ public class Og implements Serializable {
 	private String ogImageUrl;
 	private String ogDescription;
 	private String ogTitle;
+	private Map map;
 }

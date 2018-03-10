@@ -1,7 +1,9 @@
 package com.almond.api.og.service;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.almond.api.og.domain.Og;
+import com.almond.common.domain.Map;
 import com.almond.util.UtilService;
 
 @Service
@@ -43,10 +46,12 @@ public class OgService {
 		
 		// HTML 추출 후 Document 형변환
     	Document doc = Jsoup.parse(result.getBody());
-		Elements ogTags = searchOG(doc, url);
+    	HashMap<String, Elements> pageData = crollingPage(doc, url);
+		Elements ogTags = pageData.get("ogTags");
+		Elements mapData = pageData.get("mapData");
 		
 		Og ogData = new Og();
-        // 필요한 OGTag를 추려낸다
+        // 필요한 페이지 데이터를 추려낸다
         for (int i = 0; i < ogTags.size(); i++) {
             Element tag = ogTags.get(i);
 
@@ -61,20 +66,37 @@ public class OgService {
             	ogData.setOgTitle(tag.attr("content"));
             }
         }
+        
+        if (mapData.size() > 0) {
+            Element mapTag = mapData.get(0);	
+            JSONObject jsonObj = new JSONObject(mapTag.attr("data-linkdata"));
+            Map map = new Map();
+            map.setTitle(jsonObj.get("title").toString());
+            map.setLatitude(jsonObj.get("latitude").toString());
+            map.setLongitude(jsonObj.get("longitude").toString());
+            map.setMarkerLatitude(jsonObj.get("markerLatitude").toString());
+            map.setMarkerLongitude(jsonObj.get("markerLongitude").toString());
+            ogData.setMap(map);
+        }
 		
 		return ogData;
 	}
 
 	/**
-	 * 재귀함수로 document안의 frame속 까지 og 태그를 찾는다.
+	 * 재귀함수로 document안의 frame속 까지 og태그, map데이터를 찾는다.
 	 * 
 	 * @param doc
 	 * @param url
 	 * @return
 	 * @throws Exception
 	 */
-	public Elements searchOG(Document doc, String url) throws Exception {
+	public HashMap<String, Elements> crollingPage(Document doc, String url) throws Exception {
 		Elements ogTags = doc.select("meta[property^=og:]");
+		Elements mapData = doc.select("[data-linktype=map]");
+		
+		HashMap<String, Elements> pageData = new HashMap<String, Elements>();
+		pageData.put("ogTags", ogTags);
+		pageData.put("mapData", mapData);
 		
 		// OG 태그가 없는경우 frame iframe 검색
 		if (ogTags.size() < 1) {
@@ -90,11 +112,11 @@ public class OgService {
 					}
 					
 					Document innerDoc = Jsoup.connect(frameSrc).get();
-					Elements innerOgTags = searchOG(innerDoc, frameSrc);
-					if (innerOgTags.size() > 0) {
-						return innerOgTags;
+					HashMap<String, Elements> innerPageData = crollingPage(innerDoc, frameSrc);
+					if (innerPageData.get("ogTags").size() > 0) {
+						return innerPageData;
 					}
-					if (innerOgTags.size() < 1) {
+					if (innerPageData.get("ogTags").size() < 1) {
 						return null;
 					}
 				}
@@ -103,6 +125,6 @@ public class OgService {
 				return null;
 			}
 		}
-		return ogTags;
+		return pageData;
 	}
 }
