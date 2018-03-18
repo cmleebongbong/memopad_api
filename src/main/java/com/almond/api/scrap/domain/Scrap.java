@@ -5,6 +5,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.almond.api.map.domain.Map;
+
 import lombok.Data;
 
 @Data
@@ -21,6 +23,7 @@ public class Scrap implements Serializable {
 	private String description;
 	private String writer;
 	private String url;
+	private Map map;
 	private Date regDate;
 	private boolean owner;
 	

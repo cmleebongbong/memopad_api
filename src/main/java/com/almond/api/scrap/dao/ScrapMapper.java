@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import com.almond.api.scrap.domain.Scrap;
 
 public interface ScrapMapper {
-	public int scrapListTotalCount(@Param(value="nationCode") String nationCode, @Param(value="cityIdx") int[] cityIdx, @Param(value="categoryIdx") int[] categoryIdx) throws Exception;
+	public int scrapListTotalCount(@Param(value="nationCode") String nationCode,
+								   @Param(value="cityIdx") int[] cityIdx, 
+								   @Param(value="categoryIdx") int[] categoryIdx) throws Exception;
 	public ArrayList<Scrap> scrapList(@Param(value="nationCode") String nationCode,
 									  @Param(value="cityIdx") int[] cityIdx, 
 									  @Param(value="categoryIdx") int[] categoryIdx, 

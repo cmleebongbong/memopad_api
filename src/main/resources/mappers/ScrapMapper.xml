@@ -4,6 +4,33 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
 <mapper namespace="com.almond.api.scrap.dao.ScrapMapper">
+	
+	<resultMap id="Scrap" type="scrap">
+		<result column="idx" property="idx"/>
+		<result column="nation_code" property="nationCode"/>
+		<result column="city_idx" property="cityIdx"/>
+		<result column="category_idx" property="categoryIdx"/>
+		<result column="image_url" property="imageUrl"/>
+		<result column="title" property="title"/>
+		<result column="description" property="description"/>
+		<result column="writer" property="writer"/>
+		<result column="url" property="url"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="owner" property="owner"/>
+		<collection property="map" resultMap="Map"/>
+	</resultMap>
+
+	<resultMap id="Map" type="maps">
+		<result column="map_idx" property="idx"/>
+		<result column="map_article_idx" property="articleIdx"/>
+		<result column="map_article_category" property="articleCategory"/>
+		<result column="map_title" property="title"/>
+		<result column="map_latitude" property="latitude"/>
+		<result column="map_longitude" property="longitude"/>
+		<result column="map_latitude" property="markerLatitude"/>
+		<result column="map_longitude" property="markerLongitude"/>
+		<result column="map_reg_date" property="regDate"/>
+	</resultMap>
  	
     <select id="scrapListTotalCount" resultType="int">
     	/* 스크랩 갯수 조회 */
@@ -28,41 +55,61 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		ORDER BY reg_date DESC
     </select>
  	
-    <select id="scrapList" resultType="scrap">
+    <select id="scrapList" resultMap="Scrap">
     	/* 스크랩 조회 */
-    	SELECT idx,
-    		   nation_code,
-    		   city_idx,
-    		   category_idx,
-    		   image_url,
-    		   title,
-    		   description,
+    	SELECT scrap.idx,
+    		   scrap.nation_code,
+    		   scrap.city_idx,
+    		   scrap.category_idx,
+    		   scrap.image_url,
+    		   scrap.title,
+    		   scrap.description,
     		   (SELECT nickname FROM memopad_user WHERE idx = writer) as writer,
-    		   url,
-    		   reg_date,
-			   IF(writer = ${userIdx}, 'true', 'false') as owner
-		FROM memopad_scrap
-		WHERE del_yn = 'N'
+    		   scrap.url,
+    		   scrap.reg_date,
+			   IF(writer = ${userIdx}, 'true', 'false') as owner,
+			   map.idx as map_idx,
+			   map.article_idx as map_article_idx,
+			   map.article_category as map_article_category,
+			   map.title as map_title,
+			   map.latitude as map_latitude,
+			   map.longitude as map_longitude,
+			   map.reg_date as map_reg_date
+		FROM memopad_scrap scrap
+		LEFT JOIN (
+			SELECT idx,
+				   article_idx,
+				   article_category,
+				   title,
+				   latitude,
+				   longitude,
+				   del_yn,
+				   reg_date
+		    FROM memopad_map
+		    WHERE article_category = 'scrap' AND del_yn = 'N'
+		) map
+		ON scrap.idx = map.article_idx
+		WHERE scrap.del_yn = 'N'
 		<if test="nationCode != null and nationCode != ''">
-		AND nation_code = #{nationCode}
+		AND scrap.nation_code = #{nationCode}
 		</if>
 		<if test="cityIdx != null">
-		AND city_idx IN
+		AND scrap.city_idx IN
 	        <foreach collection="cityIdx" item="item" open="(" close=")" separator=",">
 	            ${item}
 	        </foreach>
 		</if>
 		<if test="categoryIdx != null">
-		AND category_idx IN
+		AND scrap.category_idx IN
 	        <foreach collection="categoryIdx" item="item" open="(" close=")" separator=",">
 	            ${item}
 	        </foreach>
 		</if>
-		ORDER BY reg_date DESC
+		ORDER BY scrap.reg_date DESC
 		LIMIT ${(page - 1) * limit}, ${limit};
     </select>
  	
-    <insert id="scrapRegister" parameterType="scrap">
+    <insert id="scrapRegister" parameterType="scrap" useGeneratedKeys="true" keyProperty="idx">
     	/* 스크랩 등록 */
     	INSERT INTO memopad_scrap (
    	        nation_code,

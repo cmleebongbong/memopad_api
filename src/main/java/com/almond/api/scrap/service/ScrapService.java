@@ -4,12 +4,19 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.almond.api.map.domain.Map;
+import com.almond.api.map.service.MapService;
 import com.almond.api.scrap.dao.ScrapMapper;
 import com.almond.api.scrap.domain.Scrap;
 
 @Service
 public class ScrapService {
+	@Autowired
+	private MapService mapService;
+	
     @Autowired
     private ScrapMapper scrapMapper;
     
@@ -40,7 +47,24 @@ public class ScrapService {
      * @return int
      * @throws Exception
      */
+    @Transactional
     public int scrapRegister(Scrap scrap) throws Exception {
-    	return scrapMapper.scrapRegister(scrap);
+    	int result = 0;
+    	try {
+    		scrapMapper.scrapRegister(scrap);
+    		Map map = scrap.getMap();
+    		if (scrap.getIdx() == 0) {
+    			throw new Exception();
+    		}
+    		map.setArticleIdx(scrap.getIdx());
+    		map.setArticleCategory("scrap");
+			result = mapService.mapRegister(map);
+			if (result == 0) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+    	return result;
     }
 }

@@ -18,8 +18,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.almond.api.map.domain.Map;
 import com.almond.api.og.domain.Og;
-import com.almond.common.domain.Map;
 import com.almond.util.UtilService;
 
 @Service

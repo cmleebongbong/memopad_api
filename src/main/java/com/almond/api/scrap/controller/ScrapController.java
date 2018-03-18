@@ -85,6 +85,8 @@ public class ScrapController {
     		@RequestBody Scrap scrap) throws Exception {
     	
     	CommonResponse res = new CommonResponse();
+    	
+    	// intercepter 에서 token 을 식별해 주입해준 id, idx를 이용
     	scrap.setWriter(request.getAttribute("idx").toString());
     	int result = scrapService.scrapRegister(scrap);
     	if (result > 0) {

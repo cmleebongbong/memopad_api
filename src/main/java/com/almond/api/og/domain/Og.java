@@ -1,8 +1,9 @@
 package com.almond.api.og.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import com.almond.common.domain.Map;
+import com.almond.api.map.domain.Map;
 
 import lombok.Data;
 
