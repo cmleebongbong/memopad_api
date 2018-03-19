@@ -24,6 +24,6 @@ public class Map implements Serializable {
 	
 	public String getRegDate() {
 		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-		return df.format(regDate);
+		return regDate != null ? df.format(regDate) : null;
 	}
 }

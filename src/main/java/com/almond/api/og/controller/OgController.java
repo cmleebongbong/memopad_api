@@ -37,7 +37,6 @@ public class OgController {
     public ResponseEntity<CommonResponse> article(
     		@RequestParam String url) throws Exception {
     	
-    	
     	Og ogData = null;
     	CommonResponse res = new CommonResponse();
 
