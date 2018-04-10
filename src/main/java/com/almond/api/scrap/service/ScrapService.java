@@ -51,17 +51,20 @@ public class ScrapService {
     public int scrapRegister(Scrap scrap) throws Exception {
     	int result = 0;
     	try {
-    		scrapMapper.scrapRegister(scrap);
-    		Map map = scrap.getMap();
+    		result = scrapMapper.scrapRegister(scrap);
     		if (scrap.getIdx() == 0) {
     			throw new Exception();
     		}
-    		map.setArticleIdx(scrap.getIdx());
-    		map.setArticleCategory("scrap");
-			result = mapService.mapRegister(map);
-			if (result == 0) {
-				throw new Exception();
-			}
+    		
+    		if (scrap.getMap() != null) {
+        		Map map = scrap.getMap();
+        		map.setArticleIdx(scrap.getIdx());
+        		map.setArticleCategory("scrap");
+    			result = mapService.mapRegister(map);
+    			if (result == 0) {
+    				throw new Exception();
+    			}
+    		}
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}

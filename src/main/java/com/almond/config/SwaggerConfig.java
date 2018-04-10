@@ -24,9 +24,9 @@ public class SwaggerConfig {
     }
 	
 	private ApiInfo apiInfo() {
-		String description = "REST API for Nolja";
+		String description = "REST API for tripl";
         return new ApiInfoBuilder()
-            .title("Nolja API")
+            .title("tripl API")
             .description(description)
             .termsOfServiceUrl("github")
             .licenseUrl("")
