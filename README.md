@@ -16,10 +16,9 @@ Swagger
 
 ### 인프라 ###
 
-- SERVER: AWS (EC2, RDS, S3, ROUTE 53)
-- OS: Amazon Linux
-- DB: MariaDB
-- WEB SERVER: Nginx
+- VPS: Vultr
+- OS: CentOS
+- DB: MariaDB, Redis
 
 ### 프레임워크 ###
 
