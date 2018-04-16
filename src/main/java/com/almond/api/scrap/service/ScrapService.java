@@ -70,4 +70,59 @@ public class ScrapService {
 		}
     	return result;
     }
+	
+    /**
+     * 스크랩 좋아요 조회
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int getScrapLike(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.getScrapLike(userIdx, scrapIdx);
+    }
+	
+    /**
+     * 스크랩 좋아요 갯수 조회
+     * 
+     * @param scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int getScrapLikeCount(int scrapIdx) throws Exception {
+    	return scrapMapper.getScrapLikeCount(scrapIdx);
+    }
+	
+    /**
+     * 스크랩 좋아요 등록
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int insertScrapLike(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.insertScrapLike(userIdx, scrapIdx);
+    }
+	
+    /**
+     * 스크랩 좋아요 사용처리
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int useScrapLike(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.useScrapLike(userIdx, scrapIdx);
+    }
+	
+    /**
+     * 스크랩 좋아요 삭제처리
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int deleteScrapLike(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.deleteScrapLike(userIdx, scrapIdx);
+    }
 }

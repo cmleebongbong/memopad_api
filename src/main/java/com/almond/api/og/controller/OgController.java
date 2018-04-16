@@ -34,7 +34,7 @@ public class OgController {
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> article(
+    public ResponseEntity<CommonResponse> og(
     		@RequestParam String url) throws Exception {
     	
     	Og ogData = null;

@@ -15,8 +15,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<result column="description" property="description"/>
 		<result column="writer" property="writer"/>
 		<result column="url" property="url"/>
+		<result column="likeCount" property="likeCount"/>
 		<result column="reg_date" property="regDate"/>
 		<result column="owner" property="owner"/>
+		<result column="liked" property="liked"/>
 		<collection property="map" resultMap="Map"/>
 	</resultMap>
 
@@ -34,7 +36,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
  	
     <select id="scrapListTotalCount" resultType="int">
     	/* 스크랩 갯수 조회 */
-    	SELECT count(idx) as total
+    	SELECT COUNT(idx) as total
 		FROM memopad_scrap
 		WHERE del_yn = 'N'
 		<if test="nationCode != null and nationCode != ''">
@@ -66,8 +68,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		   scrap.description,
     		   (SELECT nickname FROM memopad_user WHERE idx = writer) as writer,
     		   scrap.url,
+    		   (SELECT COUNT(idx) FROM memopad_scrap_like WHERE scrap_idx = scrap.idx AND del_yn = 'N') as likeCount,
     		   scrap.reg_date,
 			   IF(writer = ${userIdx}, 'true', 'false') as owner,
+			   IF((SELECT COUNT(idx) FROM memopad_scrap_like WHERE user_idx = ${userIdx} AND scrap_idx = scrap.idx AND del_yn = 'N' > 0), 'true', 'false') as liked,
 			   map.idx as map_idx,
 			   map.article_idx as map_article_idx,
 			   map.article_category as map_article_category,
@@ -136,5 +140,51 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		NOW()
     	)
     </insert>
+ 	
+    <select id="getScrapLike" resultType="int">
+    	/* 스크랩 좋아요 조회 */
+    	SELECT COUNT(idx) as idx
+    	FROM memopad_scrap_like
+		WHERE user_idx = #{userIdx}
+		AND scrap_idx = #{scrapIdx}
+    </select>
+ 	
+    <select id="getScrapLikeCount" resultType="int">
+    	/* 스크랩 좋아요 갯수 조회 */
+    	SELECT COUNT(idx) as idx
+    	FROM memopad_scrap_like
+		WHERE scrap_idx = #{scrapIdx}
+		AND del_yn = 'N'
+    </select>
+ 	
+    <insert id="insertScrapLike">
+    	/* 스크랩 좋아요 등록 */
+    	INSERT INTO memopad_scrap_like (
+   	        user_idx,
+   	        scrap_idx,
+   	        reg_date
+    	)
+    	VALUES (
+    		#{userIdx},
+    		#{scrapIdx},
+    		NOW()
+    	)
+    </insert>
+ 	
+    <update id="useScrapLike">
+    	/* 스크랩 좋아요 사용처리 */
+    	UPDATE memopad_scrap_like
+    	SET del_yn = 'N'
+		WHERE user_idx = #{userIdx}
+		AND scrap_idx = #{scrapIdx}
+    </update>
+ 	
+    <update id="deleteScrapLike">
+    	/* 스크랩 좋아요 삭제처리 */
+    	UPDATE memopad_scrap_like
+    	SET del_yn = 'Y'
+		WHERE user_idx = #{userIdx}
+		AND scrap_idx = #{scrapIdx}
+    </update>
     
 </mapper>

@@ -24,8 +24,10 @@ public class Scrap implements Serializable {
 	private String writer;
 	private String url;
 	private Map map;
+	private int likeCount;
 	private Date regDate;
 	private boolean owner;
+	private boolean liked;
 	
 	public String getRegDate() {
 		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm");

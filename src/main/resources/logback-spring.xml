@@ -18,13 +18,24 @@ jdbc.connection : Logs connection open and close events
   
   <!-- LEVEL DEBUG : log on -->
   <!-- LEVEL OFF : log off -->
-  <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">
-    <appender-ref ref="STDOUT" />
-  </logger>
-  
-  <logger name="jdbc.resultsettable" level="DEBUG" additivity="false"> 
-    <appender-ref ref="STDOUT" />
-  </logger>
+  <if condition='property("spring.profiles.active").contains("dev")'>
+    <then>
+	  <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">
+	    <appender-ref ref="STDOUT" />
+	  </logger>
+	  <logger name="jdbc.resultsettable" level="DEBUG" additivity="false"> 
+	    <appender-ref ref="STDOUT" />
+	  </logger>
+    </then>
+    <else>
+      <logger name="jdbc.sqlonly" level="OFF" additivity="false">
+	    <appender-ref ref="STDOUT" />
+	  </logger>
+	  <logger name="jdbc.resultsettable" level="OFF" additivity="false"> 
+	    <appender-ref ref="STDOUT" />
+	  </logger>
+    </else>
+  </if>
   
   <root level="INFO">
     <appender-ref ref="STDOUT" />

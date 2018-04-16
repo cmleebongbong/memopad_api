@@ -17,4 +17,13 @@ public interface ScrapMapper {
 									  @Param(value="page") int page, 
 									  @Param(value="userIdx") int userIdx) throws Exception;
 	public int scrapRegister(Scrap scrap) throws Exception;
+	public int getScrapLike(@Param(value="userIdx") int userIdx, 
+			 				@Param(value="scrapIdx") int scrapIdx) throws Exception;
+	public int getScrapLikeCount(@Param(value="scrapIdx") int scrapIdx) throws Exception;
+	public int insertScrapLike(@Param(value="userIdx") int userIdx,
+						 	   @Param(value="scrapIdx") int scrapIdx) throws Exception;
+	public int useScrapLike(@Param(value="userIdx") int userIdx,
+		 	   				@Param(value="scrapIdx") int scrapIdx) throws Exception;
+	public int deleteScrapLike(@Param(value="userIdx") int userIdx,
+							   @Param(value="scrapIdx") int scrapIdx) throws Exception;
 }

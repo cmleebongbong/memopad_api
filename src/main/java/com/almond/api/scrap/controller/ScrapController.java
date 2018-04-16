@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +96,77 @@ public class ScrapController {
     	} else {
     		res.setResult(ResponseResult.ERROR);
     		res.setMessage("문제가 발생했습니다.");
+    	}
+    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    }
+
+    /**
+     * 스크랩 좋아요
+     * 
+     * @param scrapIdx
+     * @return ResponseEntity<CommonResponse>
+     * @throws Exception
+     */
+    @CheckAuth
+    @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.POST)
+    public ResponseEntity<CommonResponse> scrapLike(
+    		HttpServletRequest request,
+    		@RequestHeader(value="Authorization") String authorization,
+    		@PathVariable int scrapIdx) throws Exception {
+    	
+    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
+    	CommonResponse res = new CommonResponse();
+    	
+    	int scrapResult = scrapService.getScrapLike(userIdx, scrapIdx);
+    	int result = 0;
+    	
+    	if (scrapResult > 0) {
+    		result = scrapService.useScrapLike(userIdx, scrapIdx);
+    	} else {
+        	result = scrapService.insertScrapLike(userIdx, scrapIdx);
+    	}
+    	
+    	if (result > 0) {
+    		HashMap<String, Object> data = new HashMap<String, Object>();
+    		data.put("likeCount", scrapService.getScrapLikeCount(scrapIdx));
+        	res.setResult(ResponseResult.OK);
+        	res.setData(data);
+        	res.setMessage("좋아요 완료");
+    	} else {
+    		res.setResult(ResponseResult.ERROR);
+    		res.setMessage("좋아요 실패");
+    	}
+    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    }
+
+    /**
+     * 스크랩 좋아요 취소
+     * 
+     * @param scrapIdx
+     * @return ResponseEntity<CommonResponse>
+     * @throws Exception
+     */
+    @CheckAuth
+    @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.DELETE)
+    public ResponseEntity<CommonResponse> scrapLikeCancel(
+    		HttpServletRequest request,
+    		@RequestHeader(value="Authorization") String authorization,
+    		@PathVariable int scrapIdx) throws Exception {
+    	
+    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
+    	CommonResponse res = new CommonResponse();
+
+    	int result = scrapService.deleteScrapLike(userIdx, scrapIdx);
+    	
+    	if (result > 0) {
+    		HashMap<String, Object> data = new HashMap<String, Object>();
+    		data.put("likeCount", scrapService.getScrapLikeCount(scrapIdx));
+        	res.setResult(ResponseResult.OK);
+        	res.setData(data);
+        	res.setMessage("좋아요 취소 완료");
+    	} else {
+    		res.setResult(ResponseResult.ERROR);
+    		res.setMessage("좋아요 취소 실패");
     	}
     	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
     }

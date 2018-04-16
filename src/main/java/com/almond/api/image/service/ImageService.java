@@ -21,20 +21,17 @@ public class ImageService {
 	 */
 	public byte[] imageToByte(String urlStr) throws Exception {
     	URL url = new URL(urlStr);
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        InputStream inputStream = url.openStream();
-        try {
-            int n = 0;
-            byte [] buffer = new byte[ 1024 ];
-            while (-1 != (n = inputStream.read(buffer))) {
-                output.write(buffer, 0, n);
-            }
-        } finally {
-        	inputStream.close();
-        	output.close();
+        InputStream is = url.openStream();
+        
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		byte[] data = new byte[16384];
+		while ((nRead = is.read(data, 0, data.length)) != -1) {
+		  buffer.write(data, 0, nRead);
 		}
-    
-        return output.toByteArray();
+	
+		buffer.flush();
+		return buffer.toByteArray();
 	}
 	
 	
