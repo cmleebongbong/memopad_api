@@ -29,6 +29,10 @@ public class ImageService {
 		while ((nRead = is.read(data, 0, data.length)) != -1) {
 		  buffer.write(data, 0, nRead);
 		}
+		
+		// TEST CODE
+		// Need Code For InputStream
+		data = null;
 	
 		buffer.flush();
 		return buffer.toByteArray();
