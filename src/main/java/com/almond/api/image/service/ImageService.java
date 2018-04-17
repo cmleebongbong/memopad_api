@@ -32,6 +32,7 @@ public class ImageService {
 		
 		// TEST CODE
 		// Need Code For InputStream
+		is.close();
 		data = null;
 	
 		buffer.flush();
