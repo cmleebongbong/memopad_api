@@ -36,7 +36,9 @@ public class ImageService {
 		data = null;
 	
 		buffer.flush();
-		return buffer.toByteArray();
+		byte[] imageByteArray = buffer.toByteArray();
+		buffer = null;
+		return imageByteArray;
 	}
 	
 	
