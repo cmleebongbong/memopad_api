@@ -21,23 +21,30 @@ public class ImageService {
 	 */
 	public byte[] imageToByte(String urlStr) throws Exception {
     	URL url = new URL(urlStr);
-        InputStream is = url.openStream();
-        
+    	InputStream is = null;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		int nRead;
-		byte[] data = new byte[16384];
-		while ((nRead = is.read(data, 0, data.length)) != -1) {
-		  buffer.write(data, 0, nRead);
-		}
 		
-		// TEST CODE
-		// Need Code For InputStream
-		is.close();
-		data = null;
+		try {
+	        is = url.openStream();
+			int nRead;
+			byte[] data = new byte[16384];
+			while ((nRead = is.read(data, 0, data.length)) != -1) {
+			  buffer.write(data, 0, nRead);
+			}
+			data = null;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+			if (buffer != null) {
+				buffer.flush();
+				buffer.close();
+			}
+		}
 	
-		buffer.flush();
 		byte[] imageByteArray = buffer.toByteArray();
-		buffer = null;
 		return imageByteArray;
 	}
 	
