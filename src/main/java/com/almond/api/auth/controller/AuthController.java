@@ -5,7 +5,6 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,6 @@ import com.almond.util.UtilService;
 import io.swagger.annotations.Api;
 
 @Api(tags = "Auth")
-@SpringBootApplication
 @RestController
 @RequestMapping(value="/api/auth")
 public class AuthController {

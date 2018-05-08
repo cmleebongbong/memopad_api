@@ -22,6 +22,8 @@ public interface ScrapMapper {
 	public int getScrapLikeCount(@Param(value="scrapIdx") int scrapIdx) throws Exception;
 	public int insertScrapLike(@Param(value="userIdx") int userIdx,
 						 	   @Param(value="scrapIdx") int scrapIdx) throws Exception;
+	public int scrapDelete(@Param(value="userIdx") int userIdx,
+						   @Param(value="scrapIdx") int scrapIdx) throws Exception;
 	public int useScrapLike(@Param(value="userIdx") int userIdx,
 		 	   				@Param(value="scrapIdx") int scrapIdx) throws Exception;
 	public int deleteScrapLike(@Param(value="userIdx") int userIdx,

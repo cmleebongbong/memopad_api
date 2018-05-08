@@ -15,7 +15,6 @@
     
     <typeAliases>
         <typeAlias type="com.almond.api.user.domain.User" alias="user" />
-        <typeAlias type="com.almond.api.article.domain.Article" alias="article" />
         <typeAlias type="com.almond.api.city.domain.City" alias="city" />
         <typeAlias type="com.almond.api.nation.domain.Nation" alias="nation" />
         <typeAlias type="com.almond.api.category.domain.Category" alias="category" />

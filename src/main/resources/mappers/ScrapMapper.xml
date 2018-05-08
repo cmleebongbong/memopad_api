@@ -141,6 +141,14 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	)
     </insert>
  	
+    <update id="scrapDelete">
+    	/* 스크랩 삭제 */
+    	UPDATE memopad_scrap
+    	SET del_yn = 'Y'
+		WHERE idx = #{scrapIdx}
+		AND writer = #{userIdx}
+    </update>
+ 	
     <select id="getScrapLike" resultType="int">
     	/* 스크랩 좋아요 조회 */
     	SELECT COUNT(idx) as idx

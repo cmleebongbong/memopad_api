@@ -101,6 +101,34 @@ public class ScrapController {
     }
 
     /**
+     * 스크랩 삭제
+     * 
+     * @param scrapIdx
+     * @return ResponseEntity<CommonResponse>
+     * @throws Exception
+     */
+    @CheckAuth
+    @RequestMapping(value="/{scrapIdx}", method=RequestMethod.DELETE)
+    public ResponseEntity<CommonResponse> scrapDelete(
+    		HttpServletRequest request,
+    		@RequestHeader(value="Authorization") String authorization,
+    		@PathVariable int scrapIdx) throws Exception {
+    	CommonResponse res = new CommonResponse();
+
+    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
+    	int result = scrapService.scrapDelete(userIdx, scrapIdx);
+    	if (result > 0) {
+        	res.setResult(ResponseResult.OK);
+        	res.setMessage("스크랩이 삭제 되었습니다.");
+        	res.setData(scrapIdx);
+    	} else {
+    		res.setResult(ResponseResult.ERROR);
+    		res.setMessage("문제가 발생했습니다.");
+    	}
+    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    }
+
+    /**
      * 스크랩 좋아요
      * 
      * @param scrapIdx

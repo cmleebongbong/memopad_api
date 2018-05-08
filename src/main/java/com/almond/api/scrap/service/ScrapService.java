@@ -72,6 +72,17 @@ public class ScrapService {
     }
 	
     /**
+     * 스크랩 삭제
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int scrapDelete(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.scrapDelete(userIdx, scrapIdx);
+    }
+	
+    /**
      * 스크랩 좋아요 조회
      * 
      * @param userIdx, scrapIdx
