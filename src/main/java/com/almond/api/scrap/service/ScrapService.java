@@ -19,15 +19,15 @@ public class ScrapService {
 	
     @Autowired
     private ScrapMapper scrapMapper;
-    
+
     /**
      * 스크랩 목록 갯수
      * 
      * @return
      * @throws Exception
      */
-    public int scrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx) throws Exception {
-    	return scrapMapper.scrapListTotalCount(nationCode, cityIdx, categoryIdx);
+    public int scrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx, String nickname) throws Exception {
+    	return scrapMapper.scrapListTotalCount(nationCode, cityIdx, categoryIdx, nickname);
     }
     
     /**
@@ -36,8 +36,8 @@ public class ScrapService {
      * @return
      * @throws Exception
      */
-    public ArrayList<Scrap> scrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx) throws Exception {
-    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx);
+    public ArrayList<Scrap> scrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx, String nickname) throws Exception {
+    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx, nickname);
     }
 	
     /**

@@ -36,7 +36,7 @@ public class ScrapController {
 	private ScrapService scrapService;
 	
 	@Autowired
-	private AuthService authService; 
+	private AuthService authService;
 	
     /**
      * 스크랩 조회
@@ -47,6 +47,7 @@ public class ScrapController {
     @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> scrapList(
     		@RequestHeader(value="Authorization", required=false) String authorization,
+    		@RequestParam(required=false) String nickname,
     		@RequestParam(required=false) String nationCode,
     		@RequestParam(required=false, value = "city[]") int[] city,
     		@RequestParam(required=false, value = "category[]") int[] category,
@@ -54,9 +55,9 @@ public class ScrapController {
     		@RequestParam(required=false, defaultValue="1") int page) throws Exception {
     	
     	int userIdx = authService.getUserIdxByToken(authorization);
-    	int total = scrapService.scrapListTotalCount(nationCode, city, category);
+    	int total = scrapService.scrapListTotalCount(nationCode, city, category, nickname);
     	
-    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, city, category, limit, page, userIdx);
+    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, city, category, limit, page, userIdx, nickname);
     	
     	CommonResponse res = new CommonResponse();
     	HashMap<String, Object> responseData = new HashMap<String, Object>();

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,28 +66,33 @@ public class UserController {
     }
     
     /**
-     * User Info
+     * My Info
      * 
-     * @param id
      * @return ResponseEntity<CommonResponse>
      * @throws Exception
      */
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> userInfo(
-    		@PathVariable String id) throws Exception {
-    	
-   		CommonResponse res = new CommonResponse();
-   	
-    	User user = userService.selectUserById(id);
-	   	
-	   	if(user != null) {
-	   		res.setResult(ResponseResult.OK);
-	   		res.setData(user);
-        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
-	   	}else{
-	   		res.setResult(ResponseResult.ERROR);
-	   		res.setMessage("사용자 정보를 조회할수 없습니다.");
-	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.BAD_REQUEST);
-	   	}
-    }
+//    @CheckAuth
+//    @RequestMapping(value="", method=RequestMethod.GET)
+//    public ResponseEntity<CommonResponse> myInfo(
+//    		HttpServletRequest request,
+//    		@RequestHeader(value="Authorization") String authorization) throws Exception {
+//    	
+//   		CommonResponse res = new CommonResponse();
+//   		
+//   		String id = request.getAttribute("id").toString();
+//   		
+//   		System.out.println("ID : " + id);
+//   	
+//    	User user = userService.selectUserById(id);
+//	   	
+//	   	if(user != null) {
+//	   		res.setResult(ResponseResult.OK);
+//	   		res.setData(user);
+//        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+//	   	}else{
+//	   		res.setResult(ResponseResult.ERROR);
+//	   		res.setMessage("사용자 정보를 조회할수 없습니다.");
+//	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.BAD_REQUEST);
+//	   	}
+//    }
 }

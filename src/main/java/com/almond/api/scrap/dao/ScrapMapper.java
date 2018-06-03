@@ -9,13 +9,15 @@ import com.almond.api.scrap.domain.Scrap;
 public interface ScrapMapper {
 	public int scrapListTotalCount(@Param(value="nationCode") String nationCode,
 								   @Param(value="cityIdx") int[] cityIdx, 
-								   @Param(value="categoryIdx") int[] categoryIdx) throws Exception;
+								   @Param(value="categoryIdx") int[] categoryIdx,
+								   @Param(value="nickname") String nickname) throws Exception;
 	public ArrayList<Scrap> scrapList(@Param(value="nationCode") String nationCode,
 									  @Param(value="cityIdx") int[] cityIdx, 
 									  @Param(value="categoryIdx") int[] categoryIdx, 
 									  @Param(value="limit") int limit, 
 									  @Param(value="page") int page, 
-									  @Param(value="userIdx") int userIdx) throws Exception;
+									  @Param(value="userIdx") int userIdx,
+									  @Param(value="nickname") String nickname) throws Exception;
 	public int scrapRegister(Scrap scrap) throws Exception;
 	public int getScrapLike(@Param(value="userIdx") int userIdx, 
 			 				@Param(value="scrapIdx") int scrapIdx) throws Exception;

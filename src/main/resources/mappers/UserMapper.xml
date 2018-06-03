@@ -12,8 +12,11 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	       nickname,
     	       password,
     	       token,
-    	       reg_date
-    	FROM memopad_user
+    	       reg_date,
+               (SELECT COUNT(idx)
+				FROM memopad_scrap
+                WHERE writer = user.idx) as total_scrap
+    	FROM memopad_user user
     	WHERE id = #{id}
     </select>
  	

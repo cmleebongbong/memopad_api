@@ -16,4 +16,5 @@ public class User implements Serializable {
 	private String password;
 	private String token;
 	private Date regDate;
+	private int totalScrap;
 }

@@ -54,6 +54,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	            ${item}
 	        </foreach>
 		</if>
+		<if test="nickname != null">
+		AND writer = (SELECT idx FROM memopad_user WHERE nickname = #{nickname})
+		</if>
 		ORDER BY reg_date DESC
     </select>
  	
@@ -108,6 +111,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	        <foreach collection="categoryIdx" item="item" open="(" close=")" separator=",">
 	            ${item}
 	        </foreach>
+		</if>
+		<if test="nickname != null">
+		AND writer = (SELECT idx FROM memopad_user WHERE nickname = #{nickname})
 		</if>
 		ORDER BY scrap.reg_date DESC
 		LIMIT ${(page - 1) * limit}, ${limit};

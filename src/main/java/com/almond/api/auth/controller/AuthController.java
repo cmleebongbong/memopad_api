@@ -53,9 +53,11 @@ public class AuthController {
     	String id = request.getAttribute("id").toString();
     	User user = userService.selectUserById(id);
     	
-    	HashMap<String, String> data = new HashMap<String, String>();
+    	HashMap<String, Object> data = new HashMap<String, Object>();
+    	data.put("idx", user.getIdx());
     	data.put("id", id);
     	data.put("nickname", user.getNickname());
+    	data.put("totalScrap", user.getTotalScrap());
 
 		res.setResult(ResponseResult.OK);
 		res.setData(data);
