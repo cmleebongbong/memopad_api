@@ -7,10 +7,16 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.almond.util.UtilService;
 
 @Service
 public class ImageService {
+	
+	@Autowired
+	private UtilService utilService;
 	
 	/**
 	 * 이미지 Url 그대로 to Byte Array
@@ -58,16 +64,27 @@ public class ImageService {
 	 */
 	public byte[] imageToParseredByte(String url) throws Exception {
     	URL imgUrl = new URL(url);
-    	BufferedImage bufferedimage = ImageIO.read(imgUrl);
-    	
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        
-        ImageIO.write(bufferedimage, "jpg", baos);
-      
-        baos.flush();
-        byte[] imageData = baos.toByteArray();
-        baos.close();
 		
+		String extention = utilService.getExtByUrl(url);
+		
+		BufferedImage bufferedimage = null;
+		ByteArrayOutputStream baos = null;
+		
+		try {
+	    	bufferedimage = ImageIO.read(imgUrl);
+	        baos = new ByteArrayOutputStream();
+	        ImageIO.write(bufferedimage, extention, baos);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (bufferedimage != null) bufferedimage.flush(); 
+	        if (baos != null) {
+		        baos.flush();
+		        baos.close();
+	        }
+		}
+		
+        byte[] imageData = baos.toByteArray();
 		return imageData;
 	}
 }

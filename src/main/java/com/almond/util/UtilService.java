@@ -80,4 +80,35 @@ public class UtilService {
 
 	    return host;
 	}
+
+	/**
+	 * GET fileName by url
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String getFileNameByUrl(String urlStr) throws Exception {
+	    return urlStr.substring(urlStr.lastIndexOf("/") + 1, urlStr.indexOf("?") > 0 ? urlStr.indexOf("?") : urlStr.length());
+	}
+
+	/**
+	 * GET ext by url
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String getExtByUrl(String urlStr) throws Exception {
+		String filename = getFileNameByUrl(urlStr);
+	    return filename.lastIndexOf(".") > -1 ? filename.substring(filename.lastIndexOf(".") + 1).toLowerCase() : "";
+	}
+
+	/**
+	 * GET ext by filename
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public String getExtByFilename(String filename) throws Exception {
+	    return filename.lastIndexOf(".") > -1 ? filename.substring(filename.lastIndexOf(".") + 1).toLowerCase() : "";
+	}
 }
