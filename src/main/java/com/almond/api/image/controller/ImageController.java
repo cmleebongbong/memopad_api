@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.almond.api.file.domain.File;
+import com.almond.api.file.service.FileService;
 import com.almond.api.image.service.ImageService;
 import com.almond.common.domain.CommonResponse;
-import com.almond.common.domain.File;
 import com.almond.util.awsS3.AWSObjectResult;
 import com.almond.util.awsS3.AWSWrapper;
 
@@ -26,6 +27,9 @@ public class ImageController {
 
 	@Autowired
 	ImageService imageService;
+
+	@Autowired
+	FileService fileService;
 	
 	@Value("${aws.app.key}")
 	private String appKey;
@@ -36,7 +40,6 @@ public class ImageController {
 	@Value("${aws.app.bucket}")
 	private String bucket;
 	
-
     /**
      * 이미지 to Byte Array
      * 
@@ -76,18 +79,7 @@ public class ImageController {
 		file.setExtension(result.getFileExt());
 		file.setUrl("https://image.almondbongbong.com/" + result.getUuidFileName());
 		
-//		return fileService.uploadFile(file);
-
-		// 파일 업로드 디비처리
-//		List<File> files = list.stream().map(x-> {
-//			File file = new File();
-//
-//			file.setAwsUploadName(x.getUuidFileName());
-//			file.setFileName(x.getOrginalFileName());
-//			file.setFileSize(x.getFileSize());
-//
-//			return fileService.uploadFile(file);
-//		}).collect(Collectors.toList());
+		fileService.insertFile(file);
 
 		res.setMessage("업로드 성공");
 		res.setData(file);

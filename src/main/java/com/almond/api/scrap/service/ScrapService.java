@@ -3,22 +3,40 @@ package com.almond.api.scrap.service;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.almond.api.file.domain.File;
+import com.almond.api.file.service.FileService;
 import com.almond.api.map.domain.Map;
 import com.almond.api.map.service.MapService;
 import com.almond.api.scrap.dao.ScrapMapper;
 import com.almond.api.scrap.domain.Scrap;
+import com.almond.util.awsS3.AWSObjectResult;
+import com.almond.util.awsS3.AWSWrapper;
 
 @Service
 public class ScrapService {
+	
 	@Autowired
 	private MapService mapService;
 	
     @Autowired
     private ScrapMapper scrapMapper;
+
+	@Autowired
+	FileService fileService;
+	
+	@Value("${aws.app.key}")
+	private String appKey;
+	
+	@Value("${aws.app.secret}")
+	private String appSecret;
+	
+	@Value("${aws.app.bucket}")
+	private String bucket;
 
     /**
      * 스크랩 목록 갯수
@@ -26,8 +44,8 @@ public class ScrapService {
      * @return
      * @throws Exception
      */
-    public int scrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx, String nickname) throws Exception {
-    	return scrapMapper.scrapListTotalCount(nationCode, cityIdx, categoryIdx, nickname);
+    public int getScrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx, String nickname) throws Exception {
+    	return scrapMapper.getScrapListTotalCount(nationCode, cityIdx, categoryIdx, nickname);
     }
     
     /**
@@ -36,8 +54,8 @@ public class ScrapService {
      * @return
      * @throws Exception
      */
-    public ArrayList<Scrap> scrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx, String nickname) throws Exception {
-    	return scrapMapper.scrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx, nickname);
+    public ArrayList<Scrap> getScrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx, String nickname) throws Exception {
+        return scrapMapper.getScrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx, nickname);
     }
 	
     /**
@@ -48,11 +66,28 @@ public class ScrapService {
      * @throws Exception
      */
     @Transactional
-    public int scrapRegister(Scrap scrap) throws Exception {
+    public int registerScrap(Scrap scrap) throws Exception {
     	int result = 0;
     	try {
-    		result = scrapMapper.scrapRegister(scrap);
-    		if (scrap.getIdx() == 0) {
+        	AWSWrapper awsWrapper = new AWSWrapper(appKey, appSecret, bucket);
+    		AWSObjectResult uploadResult = awsWrapper.uploadByUrl(scrap.getImageUrl());
+
+    		File file = new File();
+
+    		file.setAwsUploadName(uploadResult.getUuidFileName());
+    		file.setFileName(uploadResult.getOrginalFileName());
+    		file.setFileSize(uploadResult.getFileSize());
+    		file.setExtension(uploadResult.getFileExt());
+    		file.setUrl("https://image.almondbongbong.com/" + uploadResult.getUuidFileName());
+    		
+    		result = fileService.insertFile(file);
+    		if (result == 0) {
+    			throw new Exception();
+    		}
+    		
+    		scrap.setImageIdx(file.getIdx());
+    		result = scrapMapper.registerScrap(scrap);
+    		if (result == 0) {
     			throw new Exception();
     		}
     		
@@ -72,14 +107,25 @@ public class ScrapService {
     }
 	
     /**
+     * 스크랩 수정
+     * 
+     * @param userIdx, scrapIdx
+     * @return int
+     * @throws Exception
+     */
+    public int updateScrap(Scrap scrap) throws Exception {
+    	return scrapMapper.updateScrap(scrap);
+    }
+	
+    /**
      * 스크랩 삭제
      * 
      * @param userIdx, scrapIdx
      * @return int
      * @throws Exception
      */
-    public int scrapDelete(int userIdx, int scrapIdx) throws Exception {
-    	return scrapMapper.scrapDelete(userIdx, scrapIdx);
+    public int deleteScrap(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.deleteScrap(userIdx, scrapIdx);
     }
 	
     /**
@@ -122,8 +168,8 @@ public class ScrapService {
      * @return int
      * @throws Exception
      */
-    public int useScrapLike(int userIdx, int scrapIdx) throws Exception {
-    	return scrapMapper.useScrapLike(userIdx, scrapIdx);
+    public int activeScrapLike(int userIdx, int scrapIdx) throws Exception {
+    	return scrapMapper.activeScrapLike(userIdx, scrapIdx);
     }
 	
     /**

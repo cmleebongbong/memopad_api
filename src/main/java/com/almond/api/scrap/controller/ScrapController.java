@@ -45,7 +45,7 @@ public class ScrapController {
      * @throws Exception
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> scrapList(
+    public ResponseEntity<CommonResponse> selectScrapList(
     		@RequestHeader(value="Authorization", required=false) String authorization,
     		@RequestParam(required=false) String nickname,
     		@RequestParam(required=false) String nationCode,
@@ -55,9 +55,9 @@ public class ScrapController {
     		@RequestParam(required=false, defaultValue="1") int page) throws Exception {
     	
     	int userIdx = authService.getUserIdxByToken(authorization);
-    	int total = scrapService.scrapListTotalCount(nationCode, city, category, nickname);
+    	int total = scrapService.getScrapListTotalCount(nationCode, city, category, nickname);
     	
-    	ArrayList<Scrap> scrapList = scrapService.scrapList(nationCode, city, category, limit, page, userIdx, nickname);
+    	ArrayList<Scrap> scrapList = scrapService.getScrapList(nationCode, city, category, limit, page, userIdx, nickname);
     	
     	CommonResponse res = new CommonResponse();
     	HashMap<String, Object> responseData = new HashMap<String, Object>();
@@ -81,7 +81,7 @@ public class ScrapController {
      */
     @CheckAuth
     @RequestMapping(value="", method=RequestMethod.POST)
-    public ResponseEntity<CommonResponse> scrapRegister(
+    public ResponseEntity<CommonResponse> insertScrap(
     		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
     		@RequestBody Scrap scrap) throws Exception {
@@ -90,7 +90,7 @@ public class ScrapController {
     	
     	// intercepter 에서 token 을 식별해 주입해준 id, idx를 이용
     	scrap.setWriter(request.getAttribute("idx").toString());
-    	int result = scrapService.scrapRegister(scrap);
+    	int result = scrapService.registerScrap(scrap);
     	if (result > 0) {
         	res.setResult(ResponseResult.OK);
         	res.setMessage("스크랩 되었습니다.");
@@ -110,14 +110,14 @@ public class ScrapController {
      */
     @CheckAuth
     @RequestMapping(value="/{scrapIdx}", method=RequestMethod.DELETE)
-    public ResponseEntity<CommonResponse> scrapDelete(
+    public ResponseEntity<CommonResponse> deleteScrap(
     		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
     		@PathVariable int scrapIdx) throws Exception {
     	CommonResponse res = new CommonResponse();
 
     	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
-    	int result = scrapService.scrapDelete(userIdx, scrapIdx);
+    	int result = scrapService.deleteScrap(userIdx, scrapIdx);
     	if (result > 0) {
         	res.setResult(ResponseResult.OK);
         	res.setMessage("스크랩이 삭제 되었습니다.");
@@ -138,7 +138,7 @@ public class ScrapController {
      */
     @CheckAuth
     @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.POST)
-    public ResponseEntity<CommonResponse> scrapLike(
+    public ResponseEntity<CommonResponse> activeScrapLike(
     		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
     		@PathVariable int scrapIdx) throws Exception {
@@ -150,7 +150,7 @@ public class ScrapController {
     	int result = 0;
     	
     	if (scrapResult > 0) {
-    		result = scrapService.useScrapLike(userIdx, scrapIdx);
+    		result = scrapService.activeScrapLike(userIdx, scrapIdx);
     	} else {
         	result = scrapService.insertScrapLike(userIdx, scrapIdx);
     	}
@@ -177,7 +177,7 @@ public class ScrapController {
      */
     @CheckAuth
     @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.DELETE)
-    public ResponseEntity<CommonResponse> scrapLikeCancel(
+    public ResponseEntity<CommonResponse> cancelScrapLike(
     		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
     		@PathVariable int scrapIdx) throws Exception {

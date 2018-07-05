@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<result column="nation_code" property="nationCode"/>
 		<result column="city_idx" property="cityIdx"/>
 		<result column="category_idx" property="categoryIdx"/>
+		<result column="image_idx" property="imageIdx"/>
 		<result column="image_url" property="imageUrl"/>
 		<result column="title" property="title"/>
 		<result column="description" property="description"/>
@@ -34,7 +35,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<result column="map_reg_date" property="regDate"/>
 	</resultMap>
  	
-    <select id="scrapListTotalCount" resultType="int">
+    <select id="getScrapListTotalCount" resultType="int">
     	/* 스크랩 갯수 조회 */
     	SELECT COUNT(idx) as total
 		FROM memopad_scrap
@@ -60,13 +61,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		ORDER BY reg_date DESC
     </select>
  	
-    <select id="scrapList" resultMap="Scrap">
+    <select id="getScrapList" resultMap="Scrap">
     	/* 스크랩 조회 */
     	SELECT scrap.idx,
     		   scrap.nation_code,
     		   scrap.city_idx,
     		   scrap.category_idx,
-    		   scrap.image_url,
+    		   (SELECT url FROM memopad_file WHERE idx = image_idx) as image_url,
     		   scrap.title,
     		   scrap.description,
     		   (SELECT nickname FROM memopad_user WHERE idx = writer) as writer,
@@ -119,13 +120,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		LIMIT ${(page - 1) * limit}, ${limit};
     </select>
  	
-    <insert id="scrapRegister" parameterType="scrap" useGeneratedKeys="true" keyProperty="idx">
+    <insert id="registerScrap" parameterType="scrap" useGeneratedKeys="true" keyProperty="idx">
     	/* 스크랩 등록 */
     	INSERT INTO memopad_scrap (
    	        nation_code,
    	        city_idx,
    	        category_idx,
-   	        image_url,
+   	        image_idx,
    	        title,
    	        description,
    	        writer,
@@ -137,7 +138,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		#{nationCode},
     		#{cityIdx},
     		#{categoryIdx},
-    		#{imageUrl},
+    		#{imageIdx},
     		#{title},
     		#{description},
     		#{writer},
@@ -146,8 +147,17 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		NOW()
     	)
     </insert>
+    
+    <update id="updateScrap">
+    	/* 스크랩 수정 */
+    	UPDATE memopad_scrap
+    	SET title = #{title},
+    	    description = #{description},
+    	    image_idx = #{imageIdx}
+		WHERE idx = #{idx}
+    </update>
  	
-    <update id="scrapDelete">
+    <update id="deleteScrap">
     	/* 스크랩 삭제 */
     	UPDATE memopad_scrap
     	SET del_yn = 'Y'
@@ -185,7 +195,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	)
     </insert>
  	
-    <update id="useScrapLike">
+    <update id="activeScrapLike">
     	/* 스크랩 좋아요 사용처리 */
     	UPDATE memopad_scrap_like
     	SET del_yn = 'N'

@@ -66,6 +66,7 @@ public class ImageService {
     	URL imgUrl = new URL(url);
 		
 		String extention = utilService.getExtByUrl(url);
+		if (extention == "jpeg") extention = "jpg";
 		
 		BufferedImage bufferedimage = null;
 		ByteArrayOutputStream baos = null;

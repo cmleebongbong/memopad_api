@@ -1,4 +1,4 @@
-package com.almond.common.domain;
+package com.almond.api.file.domain;
 
 import java.io.Serializable;
 import java.text.DateFormat;

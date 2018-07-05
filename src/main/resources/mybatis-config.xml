@@ -20,5 +20,6 @@
         <typeAlias type="com.almond.api.category.domain.Category" alias="category" />
         <typeAlias type="com.almond.api.scrap.domain.Scrap" alias="scrap" />
         <typeAlias type="com.almond.api.map.domain.Map" alias="maps" />
+        <typeAlias type="com.almond.api.file.domain.File" alias="file" />
     </typeAliases>
 </configuration>

@@ -18,6 +18,7 @@ public class Scrap implements Serializable {
 	private String nationCode;
 	private int cityIdx;
 	private int categoryIdx;
+	private long imageIdx;
 	private String imageUrl;
 	private String title;
 	private String description;

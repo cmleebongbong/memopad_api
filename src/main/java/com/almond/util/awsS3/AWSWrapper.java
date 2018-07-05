@@ -131,15 +131,16 @@ public class AWSWrapper {
         	
     		String uuid = UUID.randomUUID().toString();
     		String fileName = uuid + "." + fileExt;
+    		
+	    	// 이미지인지 검증하기
+    		String[] imageTypes = {"jpg","png","jpeg","gif"};
+    		boolean isImage = Arrays.stream(imageTypes).anyMatch(x->x.equals(fileExt));
+    		if (isImage) fileName = "image/" + fileName;
         	
     		awsObjectResult = upload(is, fileName);
     		awsObjectResult.setFileExt(fileExt);
     		awsObjectResult.setOrginalFileName(originalFileName);
     		awsObjectResult.setUuidFileName(fileName);
-    		
-	    	// 이미지인지 검증하기
-//    		String[] imageTypes = {".jpg",".png",".jpge",".gif"};
-//    		boolean isImage = Arrays.stream(imageTypes).anyMatch(x->x.equals(fileExt));
 			
         } catch (Exception e) {
             e.printStackTrace();

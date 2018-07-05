@@ -10,6 +10,7 @@ import com.almond.api.category.domain.Category;
 
 @Service
 public class CategoryService {
+	
     @Autowired
     private CategoryMapper categoryMapper;
 	
