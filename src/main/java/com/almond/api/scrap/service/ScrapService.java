@@ -19,15 +19,9 @@ import com.almond.util.awsS3.AWSWrapper;
 
 @Service
 public class ScrapService {
-	
-	@Autowired
-	private MapService mapService;
-	
-    @Autowired
-    private ScrapMapper scrapMapper;
-
-	@Autowired
-	FileService fileService;
+	private final MapService mapService;
+    private final ScrapMapper scrapMapper;
+	private final FileService fileService;
 	
 	@Value("${aws.app.key}")
 	private String appKey;
@@ -38,11 +32,15 @@ public class ScrapService {
 	@Value("${aws.app.bucket}")
 	private String bucket;
 
+	@Autowired
+	public ScrapService(MapService mapService, ScrapMapper scrapMapper, FileService fileService) {
+		this.mapService = mapService;
+		this.scrapMapper = scrapMapper;
+		this.fileService = fileService;
+	}
+
     /**
      * 스크랩 목록 갯수
-     * 
-     * @return
-     * @throws Exception
      */
     public int getScrapListTotalCount(String nationCode, int[] cityIdx, int[] categoryIdx, String nickname) throws Exception {
     	return scrapMapper.getScrapListTotalCount(nationCode, cityIdx, categoryIdx, nickname);
@@ -50,23 +48,23 @@ public class ScrapService {
     
     /**
      * 스크랩 목록 조회
-     * 
-     * @return
-     * @throws Exception
      */
     public ArrayList<Scrap> getScrapList(String nationCode, int[] cityIdx, int[] categoryIdx, int limit, int page, int userIdx, String nickname) throws Exception {
         return scrapMapper.getScrapList(nationCode, cityIdx, categoryIdx, limit, page, userIdx, nickname);
     }
-	
+
+    /**
+     * 스크랩 상세 조회
+     */
+    public Scrap getScrap(int idx, int userIdx) throws Exception {
+        return scrapMapper.getScrap(idx, userIdx);
+    }
+
     /**
      * 스크랩 등록
-     * 
-     * @param Scrap
-     * @return int
-     * @throws Exception
      */
     @Transactional
-    public int registerScrap(Scrap scrap) throws Exception {
+    public int registerScrap(Scrap scrap) {
     	int result = 0;
     	try {
         	AWSWrapper awsWrapper = new AWSWrapper(appKey, appSecret, bucket);
@@ -108,10 +106,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 수정
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int updateScrap(Scrap scrap) throws Exception {
     	return scrapMapper.updateScrap(scrap);
@@ -119,10 +113,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 삭제
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int deleteScrap(int userIdx, int scrapIdx) throws Exception {
     	return scrapMapper.deleteScrap(userIdx, scrapIdx);
@@ -130,10 +120,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 좋아요 조회
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int getScrapLike(int userIdx, int scrapIdx) throws Exception {
     	return scrapMapper.getScrapLike(userIdx, scrapIdx);
@@ -141,10 +127,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 좋아요 갯수 조회
-     * 
-     * @param scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int getScrapLikeCount(int scrapIdx) throws Exception {
     	return scrapMapper.getScrapLikeCount(scrapIdx);
@@ -152,10 +134,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 좋아요 등록
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int insertScrapLike(int userIdx, int scrapIdx) throws Exception {
     	return scrapMapper.insertScrapLike(userIdx, scrapIdx);
@@ -163,10 +141,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 좋아요 사용처리
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int activeScrapLike(int userIdx, int scrapIdx) throws Exception {
     	return scrapMapper.activeScrapLike(userIdx, scrapIdx);
@@ -174,10 +148,6 @@ public class ScrapService {
 	
     /**
      * 스크랩 좋아요 삭제처리
-     * 
-     * @param userIdx, scrapIdx
-     * @return int
-     * @throws Exception
      */
     public int deleteScrapLike(int userIdx, int scrapIdx) throws Exception {
     	return scrapMapper.deleteScrapLike(userIdx, scrapIdx);

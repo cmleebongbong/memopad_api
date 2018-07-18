@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class CORSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
- 
+
     }
  
     @Override

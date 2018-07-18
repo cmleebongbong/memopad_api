@@ -1,12 +1,14 @@
 package com.almond.api.user.dao;
 
 import com.almond.api.user.domain.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserMapper {
-	public User selectUserById(String id) throws Exception;
-	public User selectUserByNickname(String nickname) throws Exception;
-	public User selectUserByToken(String token) throws Exception;
-	public User signin(User user) throws Exception;
-	public int signup(User user) throws Exception;
-	public int updateAccessToken(User user) throws Exception;
+	User selectUserByIdx(int idx) throws Exception;
+	User selectUserById(String id) throws Exception;
+	User selectUserByNickname(String nickname) throws Exception;
+	User selectUserByToken(String token) throws Exception;
+	int signUp(User user) throws Exception;
+	int updateAccessToken(User user) throws Exception;
 }

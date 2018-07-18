@@ -3,10 +3,7 @@ package com.almond.api.scrap.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,26 +23,33 @@ import com.almond.common.domain.CommonResponse;
 
 import io.swagger.annotations.Api;
 
-@SpringBootApplication
 @Api(tags = "Scrap")
 @RestController
 @RequestMapping(value="/api/scrap")
 public class ScrapController {
-	
+	private final ScrapService scrapService;
+	private final AuthService authService;
+
 	@Autowired
-	private ScrapService scrapService;
-	
-	@Autowired
-	private AuthService authService;
-	
+	public ScrapController(ScrapService scrapService, AuthService authService) {
+		this.scrapService = scrapService;
+		this.authService = authService;
+	}
+
     /**
-     * 스크랩 조회
-     * 
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
+     * 스크랩 목록 조회
+     *
+     * @param authorization 인증정보
+     * @param nickname 닉네임
+     * @param nationCode 국가코드
+     * @param city 도시 idx
+     * @param category 카테고리 idx
+     * @param limit 조회 갯수
+     * @param page 조회 페이지
+     * @return result, total, totalPage, limit, page, list
      */
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity<CommonResponse> selectScrapList(
+    public ResponseEntity<CommonResponse> getScrapList(
     		@RequestHeader(value="Authorization", required=false) String authorization,
     		@RequestParam(required=false) String nickname,
     		@RequestParam(required=false) String nationCode,
@@ -60,7 +64,7 @@ public class ScrapController {
     	ArrayList<Scrap> scrapList = scrapService.getScrapList(nationCode, city, category, limit, page, userIdx, nickname);
     	
     	CommonResponse res = new CommonResponse();
-    	HashMap<String, Object> responseData = new HashMap<String, Object>();
+    	HashMap<String, Object> responseData = new HashMap<>();
     	responseData.put("total", total);
     	responseData.put("totalPage", Math.ceil((double)total / (double)limit));
     	responseData.put("limit", limit);
@@ -69,27 +73,48 @@ public class ScrapController {
     	res.setResult(ResponseResult.OK);
     	res.setData(responseData);
 
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+	/**
+	 * 스크랩 상세 조회
+	 *
+	 * @param authorization token
+	 * @param idx 스크랩 idx
+	 * @return result, scrap
+	 */
+	@RequestMapping(value="/{idx}", method=RequestMethod.GET)
+	public ResponseEntity<CommonResponse> getScrap(
+			@RequestHeader(value="Authorization", required=false) String authorization,
+			@PathVariable int idx) throws Exception {
+
+		int userIdx = authService.getUserIdxByToken(authorization);
+		Scrap scrap = scrapService.getScrap(idx, userIdx);
+
+		CommonResponse res = new CommonResponse();
+		res.setResult(ResponseResult.OK);
+		res.setData(scrap);
+
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 
     /**
      * 스크랩 등록
-     * 
-     * @param Scrap
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
+     *
+     * @param authorization token
+     * @param scrap 스크랩 data
+     * @return result, message
      */
     @CheckAuth
     @RequestMapping(value="", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> insertScrap(
-    		HttpServletRequest request,
-    		@RequestHeader(value="Authorization") String authorization,
-    		@RequestBody Scrap scrap) throws Exception {
+		   @RequestHeader(value="Authorization") String authorization,
+           @RequestBody Scrap scrap) throws Exception {
     	
     	CommonResponse res = new CommonResponse();
-    	
-    	// intercepter 에서 token 을 식별해 주입해준 id, idx를 이용
-    	scrap.setWriter(request.getAttribute("idx").toString());
+
+	    int userIdx = authService.getUserIdxByToken(authorization);
+    	scrap.setWriter(Integer.toString(userIdx));
     	int result = scrapService.registerScrap(scrap);
     	if (result > 0) {
         	res.setResult(ResponseResult.OK);
@@ -98,66 +123,64 @@ public class ScrapController {
     		res.setResult(ResponseResult.ERROR);
     		res.setMessage("문제가 발생했습니다.");
     	}
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    /**
-     * 스크랩 삭제
-     * 
-     * @param scrapIdx
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
-     */
+	/**
+	 * 스크랩 삭제
+	 *
+	 * @param authorization token
+	 * @param idx 스크랩 idx
+	 * @return result, message, idx
+	 */
     @CheckAuth
-    @RequestMapping(value="/{scrapIdx}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/{idx}", method=RequestMethod.DELETE)
     public ResponseEntity<CommonResponse> deleteScrap(
-    		HttpServletRequest request,
-    		@RequestHeader(value="Authorization") String authorization,
-    		@PathVariable int scrapIdx) throws Exception {
+		   @RequestHeader(value="Authorization") String authorization,
+    	   @PathVariable int idx) throws Exception {
     	CommonResponse res = new CommonResponse();
 
-    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
-    	int result = scrapService.deleteScrap(userIdx, scrapIdx);
+	    int userIdx = authService.getUserIdxByToken(authorization);
+    	int result = scrapService.deleteScrap(userIdx, idx);
     	if (result > 0) {
         	res.setResult(ResponseResult.OK);
         	res.setMessage("스크랩이 삭제 되었습니다.");
-        	res.setData(scrapIdx);
+        	res.setData(idx);
     	} else {
     		res.setResult(ResponseResult.ERROR);
     		res.setMessage("문제가 발생했습니다.");
     	}
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    /**
-     * 스크랩 좋아요
-     * 
-     * @param scrapIdx
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
-     */
+	/**
+	 * 스크랩 좋아요
+	 *
+	 * @param authorization token
+	 * @param idx 스크랩 idx
+	 * @return result, message, likeCount
+	 */
     @CheckAuth
-    @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.POST)
+    @RequestMapping(value="/like/{idx}", method=RequestMethod.POST)
     public ResponseEntity<CommonResponse> activeScrapLike(
-    		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
-    		@PathVariable int scrapIdx) throws Exception {
-    	
-    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
+    		@PathVariable int idx) throws Exception {
+
+    	int userIdx = authService.getUserIdxByToken(authorization);
     	CommonResponse res = new CommonResponse();
     	
-    	int scrapResult = scrapService.getScrapLike(userIdx, scrapIdx);
-    	int result = 0;
+    	int scrapResult = scrapService.getScrapLike(userIdx, idx);
+    	int result;
     	
     	if (scrapResult > 0) {
-    		result = scrapService.activeScrapLike(userIdx, scrapIdx);
+    		result = scrapService.activeScrapLike(userIdx, idx);
     	} else {
-        	result = scrapService.insertScrapLike(userIdx, scrapIdx);
+        	result = scrapService.insertScrapLike(userIdx, idx);
     	}
     	
     	if (result > 0) {
-    		HashMap<String, Object> data = new HashMap<String, Object>();
-    		data.put("likeCount", scrapService.getScrapLikeCount(scrapIdx));
+    		HashMap<String, Object> data = new HashMap<>();
+    		data.put("likeCount", scrapService.getScrapLikeCount(idx));
         	res.setResult(ResponseResult.OK);
         	res.setData(data);
         	res.setMessage("좋아요 완료");
@@ -165,31 +188,30 @@ public class ScrapController {
     		res.setResult(ResponseResult.ERROR);
     		res.setMessage("좋아요 실패");
     	}
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    /**
-     * 스크랩 좋아요 취소
-     * 
-     * @param scrapIdx
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
-     */
+	/**
+	 * 스크랩 좋아요 취소
+	 *
+	 * @param authorization token
+	 * @param idx 스크랩 idx
+	 * @return result, message, likeCount
+	 */
     @CheckAuth
-    @RequestMapping(value="/like/{scrapIdx}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/like/{idx}", method=RequestMethod.DELETE)
     public ResponseEntity<CommonResponse> cancelScrapLike(
-    		HttpServletRequest request,
     		@RequestHeader(value="Authorization") String authorization,
-    		@PathVariable int scrapIdx) throws Exception {
-    	
-    	int userIdx = Integer.parseInt(request.getAttribute("idx").toString());
+    		@PathVariable int idx) throws Exception {
+
+	    int userIdx = authService.getUserIdxByToken(authorization);
     	CommonResponse res = new CommonResponse();
 
-    	int result = scrapService.deleteScrapLike(userIdx, scrapIdx);
+    	int result = scrapService.deleteScrapLike(userIdx, idx);
     	
     	if (result > 0) {
-    		HashMap<String, Object> data = new HashMap<String, Object>();
-    		data.put("likeCount", scrapService.getScrapLikeCount(scrapIdx));
+    		HashMap<String, Object> data = new HashMap<>();
+    		data.put("likeCount", scrapService.getScrapLikeCount(idx));
         	res.setResult(ResponseResult.OK);
         	res.setData(data);
         	res.setMessage("좋아요 취소 완료");
@@ -197,6 +219,6 @@ public class ScrapController {
     		res.setResult(ResponseResult.ERROR);
     		res.setMessage("좋아요 취소 실패");
     	}
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

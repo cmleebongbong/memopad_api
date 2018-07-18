@@ -17,27 +17,27 @@ import com.almond.util.UtilService;
 
 import io.swagger.annotations.Api;
 
-@SpringBootApplication
 @Api(tags = "User")
 @RestController
 @RequestMapping(value="/api/user")
 public class UserController {
+    private UserService userService;
+    private UtilService utilService;
 
     @Autowired
-    private UserService userService;
-    @Autowired
-    private UtilService utilService;
-    
-    
+    public UserController(UserService userService, UtilService utilService) {
+        this.userService = userService;
+        this.utilService = utilService;
+    }
+
     /**
-     * Sign	up
-     * 
-     * @param user
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
+     * 회원가입
+     *
+     * @param user 가입정보
+     * @return result, message
      */
     @RequestMapping(value="", method=RequestMethod.POST)
-    public ResponseEntity<CommonResponse> signup(
+    public ResponseEntity<CommonResponse> signUp(
     		@RequestBody User user) throws Exception {
     	
    		CommonResponse res = new CommonResponse();
@@ -48,51 +48,25 @@ public class UserController {
 	   	if (idResult != null) {
 	   		// ID 중복
 	   		res.setResult(ResponseResult.ERROR);
-	   		res.setMessage("이미 사용중인 ID입니다.");
-        	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
+	   		res.setMessage("이미 사용중인 ID 입니다.");
+        	return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	   	} else if (nicknameResult != null) {
 	   		// Nickname 중복
 	   		res.setResult(ResponseResult.ERROR);
 	   		res.setMessage("이미 사용중인 닉네임입니다.");
-        	return new ResponseEntity<CommonResponse>(res, HttpStatus.CONFLICT);
+        	return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	   	} else {
 	   		// 암호화
 	   		user.setPassword(utilService.encryptSHA256(user.getPassword()));
-	   		userService.signup(user);
-	   		res.setResult(ResponseResult.OK);
-	   		res.setMessage("가입이 완료되었습니다. 로그인 해주세요.");
-	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.CREATED);
+	   		int result = userService.signUp(user);
+	   		if (result > 0) {
+			    res.setResult(ResponseResult.OK);
+			    res.setMessage("가입이 완료되었습니다.");
+		    } else {
+	   			res.setResult(ResponseResult.ERROR);
+	   			res.setMessage("가입이 실패했습니다.");
+		    }
+	   		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	   	}
     }
-    
-    /**
-     * My Info
-     * 
-     * @return ResponseEntity<CommonResponse>
-     * @throws Exception
-     */
-//    @CheckAuth
-//    @RequestMapping(value="", method=RequestMethod.GET)
-//    public ResponseEntity<CommonResponse> myInfo(
-//    		HttpServletRequest request,
-//    		@RequestHeader(value="Authorization") String authorization) throws Exception {
-//    	
-//   		CommonResponse res = new CommonResponse();
-//   		
-//   		String id = request.getAttribute("id").toString();
-//   		
-//   		System.out.println("ID : " + id);
-//   	
-//    	User user = userService.selectUserById(id);
-//	   	
-//	   	if(user != null) {
-//	   		res.setResult(ResponseResult.OK);
-//	   		res.setData(user);
-//        	return new ResponseEntity<CommonResponse>(res, HttpStatus.OK);
-//	   	}else{
-//	   		res.setResult(ResponseResult.ERROR);
-//	   		res.setMessage("사용자 정보를 조회할수 없습니다.");
-//	   		return new ResponseEntity<CommonResponse>(res, HttpStatus.BAD_REQUEST);
-//	   	}
-//    }
 }

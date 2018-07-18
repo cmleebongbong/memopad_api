@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     </select>
  	
     <select id="getScrapList" resultMap="Scrap">
-    	/* 스크랩 조회 */
+    	/* 스크랩 목록 조회 */
     	SELECT scrap.idx,
     		   scrap.nation_code,
     		   scrap.city_idx,
@@ -119,6 +119,45 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		ORDER BY scrap.reg_date DESC
 		LIMIT ${(page - 1) * limit}, ${limit};
     </select>
+
+	<select id="getScrap" resultMap="Scrap">
+		/* 스크랩 상세 조회 */
+		SELECT scrap.idx,
+				scrap.nation_code,
+				scrap.city_idx,
+				scrap.category_idx,
+				(SELECT url FROM memopad_file WHERE idx = image_idx) as image_url,
+				scrap.title,
+				scrap.description,
+				(SELECT nickname FROM memopad_user WHERE idx = writer) as writer,
+				scrap.url,
+				(SELECT COUNT(idx) FROM memopad_scrap_like WHERE scrap_idx = scrap.idx AND del_yn = 'N') as likeCount,
+				scrap.reg_date,
+				IF(writer = ${userIdx}, 'true', 'false') as owner,
+				IF((SELECT COUNT(idx) FROM memopad_scrap_like WHERE user_idx = ${userIdx} AND scrap_idx = scrap.idx AND del_yn = 'N' > 0), 'true', 'false') as liked,
+				map.idx as map_idx,
+				map.article_idx as map_article_idx,
+				map.article_category as map_article_category,
+				map.title as map_title,
+				map.latitude as map_latitude,
+				map.longitude as map_longitude,
+				map.reg_date as map_reg_date
+		FROM memopad_scrap scrap
+		LEFT JOIN (
+			SELECT idx,
+					article_idx,
+					article_category,
+					title,
+					latitude,
+					longitude,
+					del_yn,
+					reg_date
+			FROM memopad_map
+			WHERE article_category = 'scrap' AND del_yn = 'N'
+		) map
+		ON scrap.idx = map.article_idx
+		WHERE scrap.del_yn = 'N' AND scrap.idx = #{idx}
+	</select>
  	
     <insert id="registerScrap" parameterType="scrap" useGeneratedKeys="true" keyProperty="idx">
     	/* 스크랩 등록 */

@@ -8,50 +8,50 @@ import com.almond.api.user.domain.User;
 
 @Service
 public class UserService {
-    @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    public UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    /**
+     * 유저 조회 by idx
+     */
+    public User selectUserByIdx(int idx) throws Exception {
+        return userMapper.selectUserByIdx(idx);
+    }
 	
     /**
-     * @param id
-     * @return User
-     * @throws Exception
+     * 유저 조회 by id
      */
     public User selectUserById(String id) throws Exception {
-    	User user = userMapper.selectUserById(id);
-    	return user;
+    	return userMapper.selectUserById(id);
     }
 	
     /**
-     * @param nickname
-     * @return User
-     * @throws Exception
+     * 유저 조회 by nickname
      */
     public User selectUserByNickname(String nickname) throws Exception {
-    	User user = userMapper.selectUserByNickname(nickname);
-    	return user;
+    	return userMapper.selectUserByNickname(nickname);
     }
     
     /**
-     * @param key
-     * @return
-     * @throws Exception
+     * 유저 조회 by token
      */
     public User selectUserByToken(String token) throws Exception {
-    	User user = userMapper.selectUserByToken(token);
-    	return user;
+    	return userMapper.selectUserByToken(token);
     }
     
     /**
-     * @param user
-     * @throws Exception
+     * 회원 가입
      */
-    public void signup(User user) throws Exception {
-    	userMapper.signup(user);
+    public int signUp(User user) throws Exception {
+    	return userMapper.signUp(user);
     }
     
     /**
-     * @param user
-     * @throws Exception
+     * 토큰 갱신
      */
     public void updateAccessToken(User user) throws Exception {
     	userMapper.updateAccessToken(user);

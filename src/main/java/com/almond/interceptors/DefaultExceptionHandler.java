@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.almond.common.data.ResponseResult;
 import com.almond.common.domain.CommonResponse;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class DefaultExceptionHandler {
 	
 	@ExceptionHandler(value = Exception.class)
@@ -26,6 +27,6 @@ public class DefaultExceptionHandler {
     	CommonResponse res = new CommonResponse();
     	res.setResult(ResponseResult.ERROR);
     	res.setMessage("문제가 발생하였습니다.");
-    	return new ResponseEntity<CommonResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+    	return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
