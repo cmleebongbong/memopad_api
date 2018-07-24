@@ -93,7 +93,7 @@ public class ScrapService {
         		Map map = scrap.getMap();
         		map.setArticleIdx(scrap.getIdx());
         		map.setArticleCategory("scrap");
-    			result = mapService.mapRegister(map);
+    			result = mapService.registerMap(map);
     			if (result == 0) {
     				throw new Exception();
     			}
@@ -107,8 +107,27 @@ public class ScrapService {
     /**
      * 스크랩 수정
      */
+    @Transactional
     public int updateScrap(Scrap scrap) throws Exception {
-    	return scrapMapper.updateScrap(scrap);
+        int result = 0;
+
+        try {
+            result = scrapMapper.updateScrap(scrap);
+            if (result == 0) {
+                throw new Exception();
+            }
+
+            if (scrap.getMap() != null) {
+                System.out.println(scrap.getMap());
+                Map map = scrap.getMap();
+                map.setArticleIdx(scrap.getIdx());
+                map.setArticleCategory("scrap");
+                result = mapService.updateMap(map);
+            }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+    	return result;
     }
 	
     /**

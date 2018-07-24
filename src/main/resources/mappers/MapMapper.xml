@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
  
 <mapper namespace="com.almond.api.map.dao.MapMapper">
  	
-    <insert id="mapRegister" parameterType="maps">
+    <insert id="registerMap" parameterType="maps">
     	/* 지도 등록 */
     	INSERT INTO memopad_map (
    	        article_idx,
@@ -26,5 +26,14 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		NOW()
     	)
     </insert>
+
+	<update id="updateMap">
+		/* 지도 수정 */
+		UPDATE memopad_map
+		SET address = #{address},
+			road_address = #{roadAddress}
+		WHERE article_idx = #{articleIdx}
+		AND article_category = #{articleCategory}
+	</update>
     
 </mapper>

@@ -8,18 +8,24 @@ import com.almond.api.map.domain.Map;
 
 @Service
 public class MapService {
-    @Autowired
     private MapMapper mapMapper;
-	
+
+    @Autowired
+    public MapService(MapMapper mapMapper) {
+        this.mapMapper = mapMapper;
+    }
+
     /**
      * 지도 등록
-     * 
-     * @param Map
-     * @return int
-     * @throws Exception
      */
-    public int mapRegister(Map map) throws Exception {
-    	System.out.println("map : " + map);
-    	return mapMapper.mapRegister(map);
+    public int registerMap(Map map) throws Exception {
+    	return mapMapper.registerMap(map);
+    }
+
+    /**
+     * 지도 수정
+     */
+    public int updateMap(Map map) throws Exception {
+        return mapMapper.updateMap(map);
     }
 }

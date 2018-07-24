@@ -32,6 +32,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<result column="map_longitude" property="longitude"/>
 		<result column="map_latitude" property="markerLatitude"/>
 		<result column="map_longitude" property="markerLongitude"/>
+		<result column="map_address" property="address"/>
+		<result column="map_road_address" property="roadAddress"/>
 		<result column="map_reg_date" property="regDate"/>
 	</resultMap>
  	
@@ -82,6 +84,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 			   map.title as map_title,
 			   map.latitude as map_latitude,
 			   map.longitude as map_longitude,
+		       map.address as map_address,
+		       map.road_address as map_road_address,
 			   map.reg_date as map_reg_date
 		FROM memopad_scrap scrap
 		LEFT JOIN (
@@ -91,6 +95,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 				   title,
 				   latitude,
 				   longitude,
+                   address,
+                   road_address,
 				   del_yn,
 				   reg_date
 		    FROM memopad_map
@@ -141,6 +147,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 				map.title as map_title,
 				map.latitude as map_latitude,
 				map.longitude as map_longitude,
+				map.address as map_address,
+				map.road_address as map_road_address,
 				map.reg_date as map_reg_date
 		FROM memopad_scrap scrap
 		LEFT JOIN (
@@ -150,6 +158,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 					title,
 					latitude,
 					longitude,
+                    address,
+                    road_address,
 					del_yn,
 					reg_date
 			FROM memopad_map
@@ -191,9 +201,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	/* 스크랩 수정 */
     	UPDATE memopad_scrap
     	SET title = #{title},
-    	    description = #{description},
-    	    image_idx = #{imageIdx}
+			description = #{description}
 		WHERE idx = #{idx}
+		AND writer = #{writer}
     </update>
  	
     <update id="deleteScrap">

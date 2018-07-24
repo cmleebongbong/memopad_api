@@ -20,6 +20,8 @@ public class Map implements Serializable {
 	private String longitude;
 	private String markerLatitude;
 	private String markerLongitude;
+	private String address;
+	private String roadAddress;
 	private Date regDate;
 	
 	public String getRegDate() {

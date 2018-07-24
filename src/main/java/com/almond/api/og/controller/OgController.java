@@ -35,15 +35,15 @@ public class OgController {
      */
     @RequestMapping(value="", method=RequestMethod.GET)
     public ResponseEntity<CommonResponse> og(
-    		@RequestParam String url) throws Exception {
+    	   @RequestParam String url) throws Exception {
     	
     	Og ogData = null;
     	CommonResponse res = new CommonResponse();
 
-//    	ogData = ogService.getOg(url);
+    	ogData = ogService.getOg(url);
     	
     	try {
-        	ogData = ogService.getOg(url);
+//        	ogData = ogService.getOg(url);
         	res.setResult(ResponseResult.OK);
         	res.setData(ogData);
     	} catch(Exception e) {

@@ -24,12 +24,12 @@ public class SwaggerConfig {
     }
 	
 	private ApiInfo apiInfo() {
-		String description = "REST API for tripl";
+		String description = "REST API for trip & place";
         return new ApiInfoBuilder()
-            .title("tripl API")
+            .title("trip & place")
             .description(description)
             .termsOfServiceUrl("github")
-            .licenseUrl("")
+            .licenseUrl("cmlee")
             .version("1.0")
             .build();
 	}

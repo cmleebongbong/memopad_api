@@ -127,6 +127,38 @@ public class ScrapController {
     }
 
 	/**
+	 * 스크랩 수정
+	 *
+	 * @param authorization token
+	 * @param idx 스크랩 idx
+	 * @param scrap 스크랩 data
+	 * @return result, message
+	 */
+	@CheckAuth
+	@RequestMapping(value="/{idx}", method=RequestMethod.PUT)
+	public ResponseEntity<CommonResponse> modifyScrap(
+		   @RequestHeader(value="Authorization") String authorization,
+		   @PathVariable int idx,
+		   @RequestBody Scrap scrap) throws Exception {
+
+		CommonResponse res = new CommonResponse();
+
+		int userIdx = authService.getUserIdxByToken(authorization);
+		scrap.setIdx(idx);
+		scrap.setWriter(Integer.toString(userIdx));
+
+		int result = scrapService.updateScrap(scrap);
+		if (result > 0) {
+			res.setResult(ResponseResult.OK);
+			res.setMessage("수정 되었습니다.");
+		} else {
+			res.setResult(ResponseResult.ERROR);
+			res.setMessage("문제가 발생했습니다.");
+		}
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
+	/**
 	 * 스크랩 삭제
 	 *
 	 * @param authorization token
