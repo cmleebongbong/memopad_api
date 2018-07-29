@@ -16,6 +16,13 @@ public class MapService {
     }
 
     /**
+     * 지도 조회 by article_idx, article_category
+     */
+    public Map getMapByArticle(Map map) throws Exception {
+        return mapMapper.getMapByArticle(map);
+    }
+
+    /**
      * 지도 등록
      */
     public int registerMap(Map map) throws Exception {

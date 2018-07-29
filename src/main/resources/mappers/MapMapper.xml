@@ -4,7 +4,23 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
 <mapper namespace="com.almond.api.map.dao.MapMapper">
- 	
+
+	<select id="getMapByArticle" resultType="maps">
+		/* 스크랩 갯수 조회 */
+		SELECT idx,
+				latitude,
+			    longitude,
+			    title,
+			    article_idx,
+			    article_category,
+			    reg_date,
+			    address,
+			    road_address
+		FROM memopad_map
+		WHERE article_idx = #{articleIdx}
+	    AND article_category = #{articleCategory}
+	</select>
+
     <insert id="registerMap" parameterType="maps">
     	/* 지도 등록 */
     	INSERT INTO memopad_map (
@@ -13,6 +29,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
    	        latitude,
    	        longitude,
    	        title,
+            address,
+            road_address,
    	        del_yn,
    	        reg_date
     	)
@@ -22,6 +40,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     		#{markerLatitude},
     		#{markerLongitude},
     		#{title},
+            #{address},
+            #{roadAddress},
     		'N',
     		NOW()
     	)
@@ -31,7 +51,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		/* 지도 수정 */
 		UPDATE memopad_map
 		SET address = #{address},
-			road_address = #{roadAddress}
+			road_address = #{roadAddress},
+			del_yn = 'N'
 		WHERE article_idx = #{articleIdx}
 		AND article_category = #{articleCategory}
 	</update>

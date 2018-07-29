@@ -108,7 +108,7 @@ public class ScrapService {
      * 스크랩 수정
      */
     @Transactional
-    public int updateScrap(Scrap scrap) throws Exception {
+    public int updateScrap(Scrap scrap) {
         int result = 0;
 
         try {
@@ -118,11 +118,16 @@ public class ScrapService {
             }
 
             if (scrap.getMap() != null) {
-                System.out.println(scrap.getMap());
                 Map map = scrap.getMap();
                 map.setArticleIdx(scrap.getIdx());
                 map.setArticleCategory("scrap");
-                result = mapService.updateMap(map);
+
+                Map hasMap = mapService.getMapByArticle(map);
+                if (hasMap == null) {
+                    result = mapService.registerMap(map);
+                } else {
+                    result = mapService.updateMap(map);
+                }
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
